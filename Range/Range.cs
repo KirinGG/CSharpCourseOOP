@@ -29,26 +29,25 @@ namespace Range
 
         public Range GeIntervalsIntersection(Range range)
         {
-            if(range == null)
+            if (range == null)
             {
                 return null;
             }
 
-            if(range.From < this.From)
+            if ((this.From > range.To) || (range.From > this.To))
             {
-                if(range.To < this.From)
-                {
-                    // Пересечений нет
-                }
-
-                if(range.To > this.From)
-                {
-
-                }
                 return null;
             }
 
-            return null;
+            double beginRange = (range.From >= this.From) ? range.From : this.From;
+            double endRange = (range.To <= this.To) ? range.To : this.To;
+
+            return new Range(beginRange, endRange);
+        }
+
+        public override string ToString()
+        {
+            return string.Format("Range of numbers from {0} to {1}", this.From, this.To);
         }
     }
 }

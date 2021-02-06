@@ -10,16 +10,13 @@ namespace Range
             Range range2 = new Range(2, 6);
 
             Range intersectionRanges = range1.GetIntersection(range2);
+            Console.WriteLine("Пересечение интервалов {0} и {1}:", range1.ToString(), range2.ToString());
 
             if (intersectionRanges != null)
             {
-                Console.WriteLine("Пересечение интервалов {0} и {1}: {2}", range1.ToString(), range2.ToString(), intersectionRanges.ToString());
+                Console.WriteLine(intersectionRanges.ToString());
             }
-            else
-            {
-                Console.WriteLine("Пересечение интервалов {0} и {1}: Не пересекаются", range1.ToString(), range2.ToString());
-            }
-
+          
             Range[] unionRanges = range1.GetUnion(range2);
             Console.WriteLine("Объединение интервалов {0} и {1}:", range1.ToString(), range2.ToString());
 

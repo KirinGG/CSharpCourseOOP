@@ -27,7 +27,7 @@ namespace Range
             return (number - From >= -epsilon) && (To - number >= -epsilon);
         }
 
-        public Range GetIntervalsIntersection(Range range)
+        public Range GetIntersection(Range range)
         {
             if ((range == null) || (this.From > range.To) || (range.From > this.To))
             {
@@ -40,7 +40,7 @@ namespace Range
             return new Range(beginRange, endRange);
         }
 
-        public Range[] GetIntervalsUnion(Range range)
+        public Range[] GetUnion(Range range)
         {
             Range[] result = new Range[2] { null, null };
 
@@ -49,7 +49,7 @@ namespace Range
                 return result;
             }
 
-            if (this.GetIntervalsIntersection(range) == null)
+            if (this.GetIntersection(range) == null)
             {
                 result[0] = this;
                 result[1] = range;
@@ -65,7 +65,7 @@ namespace Range
             return result;
         }
 
-        public Range[] GetIntervalsDifference(Range range)
+        public Range[] GetDifference(Range range)
         {
             Range[] result = new Range[2] { null, null };
 
@@ -74,7 +74,7 @@ namespace Range
                 return result;
             }
 
-            Range intervalsIntersection = this.GetIntervalsIntersection(range);
+            Range intervalsIntersection = this.GetIntersection(range);
 
             if (intervalsIntersection == null)
             {
@@ -95,7 +95,7 @@ namespace Range
 
         public override string ToString()
         {
-            return string.Format("Range of numbers from {0} to {1}", this.From, this.To);
+            return string.Format("[{0}, {1}]", this.From, this.To);
         }
     }
 }

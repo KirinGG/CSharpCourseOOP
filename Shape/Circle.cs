@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Shape
 {
-    class Circle : IShape
+    class Circle : IShape, IComparable
     {
         public double Radius { get; set; }
 
@@ -31,6 +31,23 @@ namespace Shape
         public double getWidth()
         {
             return Radius * 2;
+        }
+
+        public int CompareTo(object obj)
+        {
+            IShape shape = obj as IShape;
+
+            if (this.getArea() > shape.getArea())
+            {
+                return 1;
+            }
+
+            if (this.getArea() < shape.getArea())
+            {
+                return -1;
+            }
+
+            return 0;
         }
     }
 }

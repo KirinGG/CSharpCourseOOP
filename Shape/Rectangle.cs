@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Shape
 {
-    class Rectangle : IShape
+    class Rectangle : IShape, IComparable
     {
         public double Height { get; set; }
         public double Width { get; set; }
@@ -33,6 +33,23 @@ namespace Shape
         public double getWidth()
         {
             return Width;
+        }
+
+        public int CompareTo(object obj)
+        {
+            IShape shape = obj as IShape;
+
+            if (this.getArea() > shape.getArea())
+            {
+                return 1;
+            }
+
+            if (this.getArea() < shape.getArea())
+            {
+                return -1;
+            }
+
+            return 0;
         }
     }
 }

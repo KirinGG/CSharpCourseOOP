@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Shape
 {
-    class Square : IShape
+    class Square : IShape, IComparable
     {
         public double SideLength { get; set; }
 
@@ -31,6 +31,23 @@ namespace Shape
         public double getWidth()
         {
             return SideLength;
+        }
+
+        public int CompareTo(object obj)
+        {
+            IShape shape = obj as IShape;
+
+            if (this.getArea() > shape.getArea())
+            {
+                return 1;
+            }
+
+            if (this.getArea() < shape.getArea())
+            {
+                return -1;
+            }
+
+            return 0;
         }
     }
 }

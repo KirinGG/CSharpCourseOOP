@@ -13,22 +13,22 @@ namespace Shape
             Radius = radius;
         }
 
-        public double getArea()
+        public double GetArea()
         {
             return Math.PI * Radius * Radius;
         }
 
-        public double getHeight()
+        public double GetHeight()
         {
             return Radius * 2;
         }
 
-        public double getPerimeter()
+        public double GetPerimeter()
         {
             return 2 * Math.PI * Radius;
         }
 
-        public double getWidth()
+        public double GetWidth()
         {
             return Radius * 2;
         }
@@ -37,12 +37,12 @@ namespace Shape
         {
             IShape shape = obj as IShape;
 
-            if (this.getArea() > shape.getArea())
+            if (this.GetArea() > shape.GetArea())
             {
                 return 1;
             }
 
-            if (this.getArea() < shape.getArea())
+            if (this.GetArea() < shape.GetArea())
             {
                 return -1;
             }

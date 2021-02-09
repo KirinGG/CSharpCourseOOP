@@ -6,9 +6,9 @@ namespace Shape
 {
     interface IShape
     {
-        double getWidth();
-        double getHeight();
-        double getArea();
-        double getPerimeter();
+        double GetWidth();
+        double GetHeight();
+        double GetArea();
+        double GetPerimeter();
     }
 }

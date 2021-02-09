@@ -103,7 +103,7 @@ namespace Shape
             CalculateSidesLength();
         }
 
-        public double getArea()
+        public double GetArea()
         {
             double halfPerimeter = this.getPerimeter() / 2;
             double area = Math.Sqrt(halfPerimeter * (halfPerimeter - sideAbLength) * (halfPerimeter - sideBcLength) * (halfPerimeter - sideCaLength));
@@ -111,17 +111,17 @@ namespace Shape
             return area;
         }
 
-        public double getHeight()
+        public double GetHeight()
         {
             return Max(y1, y2, y3);
         }
 
-        public double getPerimeter()
+        public double GetPerimeter()
         {
             return sideAbLength + sideBcLength + sideCaLength;
         }
 
-        public double getWidth()
+        public double GetWidth()
         {
             return Max(x1, x2, x3);
         }
@@ -151,12 +151,12 @@ namespace Shape
         {
             IShape shape = obj as IShape;
 
-            if(this.getArea() > shape.getArea())
+            if(this.GetArea() > shape.GetArea())
             {
                 return 1;
             }
 
-            if(this.getArea() < shape.getArea())
+            if(this.GetArea() < shape.GetArea())
             {
                 return -1;
             }

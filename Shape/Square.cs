@@ -13,22 +13,22 @@ namespace Shape
             this.SideLength = sideLength;
         }
 
-        public double getArea()
+        public double GetArea()
         {
             return SideLength * SideLength;
         }
 
-        public double getHeight()
+        public double GetHeight()
         {
             return SideLength;
         }
 
-        public double getPerimeter()
+        public double GetPerimeter()
         {
             return SideLength * 4;
         }
 
-        public double getWidth()
+        public double GetWidth()
         {
             return SideLength;
         }
@@ -37,12 +37,12 @@ namespace Shape
         {
             IShape shape = obj as IShape;
 
-            if (this.getArea() > shape.getArea())
+            if (this.GetArea() > shape.GetArea())
             {
                 return 1;
             }
 
-            if (this.getArea() < shape.getArea())
+            if (this.GetArea() < shape.GetArea())
             {
                 return -1;
             }

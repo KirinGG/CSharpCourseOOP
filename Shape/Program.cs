@@ -21,7 +21,13 @@ namespace Shape
                 Console.WriteLine(shape.getArea());
             }
 
-            Console.WriteLine(shapes[0].getPerimeter());
+            Console.WriteLine("---");
+            Array.Sort(shapes, new PerimetrComparer());
+
+            foreach (IShape shape in shapes)
+            {
+                Console.WriteLine(shape.getPerimeter());
+            }
         }
     }
 }

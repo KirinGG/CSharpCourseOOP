@@ -49,5 +49,32 @@ namespace Shape
 
             return 0;
         }
+
+        public override string ToString()
+        {
+            return string.Format("Square. Side length - {0}.", SideLength);
+        }
+
+        public override int GetHashCode()
+        {
+            return int.MaxValue - base.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            Square square = obj as Square;
+
+            if (square == null)
+            {
+                return false;
+            }
+
+            if (this.SideLength != square.SideLength)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

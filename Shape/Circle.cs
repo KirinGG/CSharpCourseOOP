@@ -49,5 +49,32 @@ namespace Shape
 
             return 0;
         }
+
+        public override string ToString()
+        {
+            return string.Format("Circle. Radius - {0}.", Radius);
+        }
+
+        public override int GetHashCode()
+        {
+            return int.MaxValue - base.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            Circle circle = obj as Circle;
+
+            if(circle == null)
+            {
+                return false;
+            }
+
+            if(this.Radius != circle.Radius)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

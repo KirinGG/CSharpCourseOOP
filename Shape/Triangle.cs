@@ -105,7 +105,7 @@ namespace Shape
 
         public double GetArea()
         {
-            double halfPerimeter = this.getPerimeter() / 2;
+            double halfPerimeter = this.GetPerimeter() / 2;
             double area = Math.Sqrt(halfPerimeter * (halfPerimeter - sideAbLength) * (halfPerimeter - sideBcLength) * (halfPerimeter - sideCaLength));
 
             return area;
@@ -162,6 +162,33 @@ namespace Shape
             }
 
             return 0;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("Triangle. AB - {0}, BC - {1}, CA - {2}.", sideAbLength, sideBcLength, sideCaLength);
+        }
+
+        public override int GetHashCode()
+        {
+            return int.MaxValue - base.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            Triangle triangle = obj as Triangle;
+
+            if (triangle == null)
+            {
+                return false;
+            }
+
+            if (!((this.sideAbLength == triangle.sideAbLength) && (this.sideBcLength == triangle.sideBcLength) && (this.sideCaLength == triangle.sideCaLength)))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

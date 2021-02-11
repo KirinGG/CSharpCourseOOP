@@ -51,5 +51,32 @@ namespace Shape
 
             return 0;
         }
+
+        public override string ToString()
+        {
+            return string.Format("Rectangle. Height - {0}; Width - {1}.", Height, Width);
+        }
+
+        public override int GetHashCode()
+        {
+            return int.MaxValue - base.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            Rectangle rectangle = obj as Rectangle;
+
+            if (rectangle == null)
+            {
+                return false;
+            }
+
+            if (!((this.Height == rectangle.Height) && (this.Width == rectangle.Width)))
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

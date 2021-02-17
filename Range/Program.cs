@@ -7,37 +7,19 @@ namespace Range
         static void Main(string[] args)
         {
             Range range1 = new Range(1, 5);
-            Range range2 = new Range(2, 6);
+            Range range2 = new Range(6, 7);
 
-            Range intersectionRanges = range1.GetIntersection(range2);
+            Range intersection = range1.GetIntersection(range2);
             Console.WriteLine("Пересечение интервалов {0} и {1}:", range1.ToString(), range2.ToString());
+            Range.Print(intersection);
 
-            if (intersectionRanges != null)
-            {
-                Console.WriteLine(intersectionRanges.ToString());
-            }
-          
-            Range[] unionRanges = range1.GetUnion(range2);
+            Range[] union = range1.GetUnion(range2);
             Console.WriteLine("Объединение интервалов {0} и {1}:", range1.ToString(), range2.ToString());
+            Range.Print(union);
 
-            foreach (Range range in unionRanges)
-            {
-                if (range != null)
-                {
-                    Console.WriteLine(range.ToString());
-                }
-            }
-
-            Range[] differenceRanges = range1.GetDifference(range2);
+            Range[] difference = range1.GetDifference(range2);
             Console.WriteLine("Разность интервалов {0} и {1}:", range1.ToString(), range2.ToString());
-
-            foreach (Range range in differenceRanges)
-            {
-                if (range != null)
-                {
-                    Console.WriteLine(range.ToString());
-                }
-            }
+            Range.Print(difference);
         }
     }
 }

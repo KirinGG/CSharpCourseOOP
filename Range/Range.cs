@@ -4,9 +4,10 @@ using System.Text;
 
 namespace Range
 {
-    class Range
+    public class Range
     {
         public double From { get; set; }
+
         public double To { get; set; }
 
         public Range(double from, double to)
@@ -29,73 +30,78 @@ namespace Range
 
         public Range GetIntersection(Range range)
         {
-            if ((range == null) || (this.From > range.To) || (range.From > this.To))
+            if ((From >= range.To) || (range.From >= To))
             {
                 return null;
             }
 
-            double beginRange = (range.From >= this.From) ? range.From : this.From;
-            double endRange = (range.To <= this.To) ? range.To : this.To;
-
-            return new Range(beginRange, endRange);
+            return new Range(Math.Max(range.From, From), Math.Min(range.To, To));
         }
 
         public Range[] GetUnion(Range range)
         {
-            Range[] result = new Range[2] { null, null };
-
-            if (range == null)
+            if ((From > range.To) || (To < range.From))
             {
-                return result;
+                return new Range[2] { new Range(From, To), new Range(range.From, range.To) };
             }
 
-            if (this.GetIntersection(range) == null)
-            {
-                result[0] = this;
-                result[1] = range;
-
-                return result;
-            }
-
-            double beginRange = (range.From < this.From) ? range.From : this.From;
-            double endRange = (range.To > this.To) ? range.To : this.To;
-
-            result[0] = new Range(beginRange, endRange);
-
-            return result;
+            return new Range[1] { new Range(Math.Min(range.From, From), Math.Max(range.To, To)) };
         }
 
         public Range[] GetDifference(Range range)
         {
-            Range[] result = new Range[2] { null, null };
-
-            if ((range == null)|| (this.Equals(range)))
+            if (From >= range.From)
             {
-                return result;
+                if (From > range.To)
+                {
+                    return new Range[1] { new Range(From, To) };
+                }
+
+                if (To <= range.To)
+                {
+                    return null;
+                }
+
+                return new Range[1] { new Range(range.To, To) };
             }
-
-            Range intervalsIntersection = this.GetIntersection(range);
-
-            if (intervalsIntersection == null)
+            else
             {
-                result[0] = this;
-                result[1] = range;
+                if (To < range.From)
+                {
+                    return new Range[1] { new Range(From, To) };
+                }
 
-                return result;
+                if (To <= range.To)
+                {
+                    return new Range[1] { new Range(From, range.From) };
+                }
+
+                return new Range[2] { new Range(From, range.From), new Range(To, range.To) };
             }
-
-            double beginRange = (range.From < this.From) ? range.From : this.From;
-            double endRange = (range.To > this.To) ? range.To : this.To;
-
-            result[0] = new Range(beginRange, intervalsIntersection.From);
-            result[1] = new Range(intervalsIntersection.To, endRange);
-
-            return result;
         }
 
         public override string ToString()
         {
-            return string.Format("[{0}, {1}]", this.From, this.To);
+            return $"({From}; {To})";
+        }
+
+        public static void Print(params Range[] ranges)
+        {
+            if (ranges[0] == null)
+            {
+                Console.WriteLine("[]");
+            }
+            else
+            {
+                string[] rangesRepresentation = new string[ranges.Length];
+
+                for (int i = 0; i < ranges.Length; i++)
+                {
+                    rangesRepresentation[i] = ranges[i].ToString();
+                }
+
+                Console.WriteLine($"[{String.Join(",", rangesRepresentation)}]");
+            }
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Vector
             vectors[3] = new Vector(new double[3] { 5, 2, 3 });
             vectors[4] = new Vector(new double[4] { 7, 2, 3, 4 });
 
-            for(int i = 0; i < vectors.Length; i++)
+            for (int i = 0; i < vectors.Length; i++)
             {
                 Console.WriteLine($"{vectors[i].ToString()}; hash code = {vectors[i].GetHashCode()}");
             }

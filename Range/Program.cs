@@ -1,25 +1,22 @@
 ﻿using System;
 
-namespace Range
+namespace IT_Academ_School
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Range range1 = new Range(1, 5);
-            Range range2 = new Range(6, 7);
+            Range range1 = new Range(1, 7);
+            Range range2 = new Range(3, 5);
 
             Range intersection = range1.GetIntersection(range2);
-            Console.WriteLine("Пересечение интервалов {0} и {1}:", range1.ToString(), range2.ToString());
-            Range.Print(intersection);
+            Console.WriteLine($"Пересечение интервалов {range1} и {range2}: {Environment.NewLine}{Range.Print(intersection)}");
 
             Range[] union = range1.GetUnion(range2);
-            Console.WriteLine("Объединение интервалов {0} и {1}:", range1.ToString(), range2.ToString());
-            Range.Print(union);
+            Console.WriteLine($"Объединение интервалов {range1} и {range2}: {Environment.NewLine}{Range.Print(union)}");
 
             Range[] difference = range1.GetDifference(range2);
-            Console.WriteLine("Разность интервалов {0} и {1}:", range1.ToString(), range2.ToString());
-            Range.Print(difference);
+            Console.WriteLine($"Разность интервалов {range1} и {range2}: {Environment.NewLine}{Range.Print(difference)}");
         }
     }
 }

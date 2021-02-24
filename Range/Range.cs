@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Range
+namespace IT_Academ_School
 {
     public class Range
     {
@@ -42,10 +40,10 @@ namespace Range
         {
             if ((From > range.To) || (To < range.From))
             {
-                return new Range[2] { new Range(From, To), new Range(range.From, range.To) };
+                return new Range[] { new Range(From, To), new Range(range.From, range.To) };
             }
 
-            return new Range[1] { new Range(Math.Min(range.From, From), Math.Max(range.To, To)) };
+            return new Range[] { new Range(Math.Min(range.From, From), Math.Max(range.To, To)) };
         }
 
         public Range[] GetDifference(Range range)
@@ -54,30 +52,29 @@ namespace Range
             {
                 if (From > range.To)
                 {
-                    return new Range[1] { new Range(From, To) };
+                    return new Range[] { new Range(From, To) };
                 }
 
                 if (To <= range.To)
                 {
-                    return null;
+                    return new Range[] { };
                 }
 
-                return new Range[1] { new Range(range.To, To) };
+                return new Range[] { new Range(range.To, To) };
             }
-            else
+
+            if (To < range.From)
             {
-                if (To < range.From)
-                {
-                    return new Range[1] { new Range(From, To) };
-                }
-
-                if (To <= range.To)
-                {
-                    return new Range[1] { new Range(From, range.From) };
-                }
-
-                return new Range[2] { new Range(From, range.From), new Range(To, range.To) };
+                return new Range[] { new Range(From, To) };
             }
+
+            if (To <= range.To)
+            {
+                return new Range[] { new Range(From, range.From) };
+            }
+
+            return new Range[] { new Range(From, range.From), new Range(range.To, To) };
+
         }
 
         public override string ToString()
@@ -85,23 +82,21 @@ namespace Range
             return $"({From}; {To})";
         }
 
-        public static void Print(params Range[] ranges)
+        public static string Print(params Range[] ranges)
         {
             if (ranges[0] == null)
             {
-                Console.WriteLine("[]");
+                return "[]";
             }
-            else
+
+            string[] rangesRepresentation = new string[ranges.Length];
+
+            for (int i = 0; i < ranges.Length; i++)
             {
-                string[] rangesRepresentation = new string[ranges.Length];
-
-                for (int i = 0; i < ranges.Length; i++)
-                {
-                    rangesRepresentation[i] = ranges[i].ToString();
-                }
-
-                Console.WriteLine($"[{String.Join(",", rangesRepresentation)}]");
+                rangesRepresentation[i] = ranges[i].ToString();
             }
+
+            return $"[{string.Join(",", rangesRepresentation)}]";
         }
     }
 }

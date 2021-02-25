@@ -1,45 +1,25 @@
 ﻿using System;
 
-namespace Shape
+namespace IT_Academ_School
 {
     class Program
     {
         static void Main(string[] args)
         {
-            IShape[] shapes = new IShape[5];
-
-            shapes[0] = new Square(5);
-            shapes[1] = new Square(3);
-            shapes[2] = new Square(5);
-            shapes[3] = new Square(1);
-            shapes[4] = new Square(2);
-       
-            Console.WriteLine("--- Equals ---");
-
-            if (shapes[0].Equals(shapes[2]))
+            IShape[] shapes =
             {
-                Console.WriteLine("{0} = {1}", shapes[0].ToString(), shapes[2].ToString());
-            }
-            else
-            {
-                Console.WriteLine("{0} <> {1}", shapes[0].ToString(), shapes[2].ToString());
-            }
+                new Square(5),
+                new Triangle(1, 1, 2, 2, 2, 1),
+                new Circle(7),
+                new Square(4),
+                new Rectangle(2, 5)
+            };
 
-            Console.WriteLine("--- Sort by area ---");
-            Array.Sort(shapes);
+            Array.Sort(shapes, new AreaComparer());
+            Console.WriteLine($"The shape with the largest area - {shapes[shapes.Length - 1]}");
 
-            foreach (IShape shape in shapes)
-            {
-                Console.WriteLine(shape.GetArea());
-            }
-
-            Console.WriteLine("--- Sort by perimeter ---");
             Array.Sort(shapes, new PerimetrComparer());
-
-            foreach (IShape shape in shapes)
-            {
-                Console.WriteLine(shape.GetPerimeter());
-            }
+            Console.WriteLine($"The shape with the second largest perimeter - {shapes[shapes.Length - 2]}");
         }
     }
 }

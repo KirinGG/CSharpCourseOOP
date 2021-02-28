@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Vector
+namespace IT_Academ_School
 {
     public class Vector
     {

@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vector", "Vector\Vector.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Matrix", "Matrix\Matrix.csproj", "{9D305507-AB58-426A-BE50-E38ECFBC7849}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileCsvConvertToHtml", "FileCsvConvertToHtml\FileCsvConvertToHtml.csproj", "{C231EA2A-FDEF-481E-B1CD-76910A00CBB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileCsvConvertToHtml", "FileCsvConvertToHtml\FileCsvConvertToHtml.csproj", "{C231EA2A-FDEF-481E-B1CD-76910A00CBB3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArrayListHome", "ArrayListHome\ArrayListHome.csproj", "{28D0DB6F-5578-4365-B45C-0B3D1BE273C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{C231EA2A-FDEF-481E-B1CD-76910A00CBB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C231EA2A-FDEF-481E-B1CD-76910A00CBB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C231EA2A-FDEF-481E-B1CD-76910A00CBB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28D0DB6F-5578-4365-B45C-0B3D1BE273C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28D0DB6F-5578-4365-B45C-0B3D1BE273C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28D0DB6F-5578-4365-B45C-0B3D1BE273C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28D0DB6F-5578-4365-B45C-0B3D1BE273C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

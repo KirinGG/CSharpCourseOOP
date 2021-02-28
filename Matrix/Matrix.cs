@@ -4,15 +4,15 @@ namespace IT_Academ_School
 {
     class Matrix
     {
-        Vector.Vector[] matrix;
+        Vector[] matrix;
 
         public Matrix(int rowsCount, int columnsCount)
         {
-            matrix = new Vector.Vector[columnsCount];
+            matrix = new Vector[columnsCount];
 
             for (int i = 0; i < columnsCount; i++)
             {
-                matrix[i] = new Vector.Vector(rowsCount);
+                matrix[i] = new Vector(rowsCount);
             }
         }
 
@@ -21,11 +21,11 @@ namespace IT_Academ_School
             int rowsCount = matrix.GetLength(0);
             int columnsCount = matrix.GetLength(1);
 
-            this.matrix = new Vector.Vector[rowsCount];
+            this.matrix = new Vector[rowsCount];
 
             for (int i = 0; i < columnsCount; i++)
             {
-                this.matrix[i] = new Vector.Vector(matrix.GetRow(i));
+                this.matrix[i] = new Vector(matrix.GetRow(i));
             }
         }
 
@@ -34,7 +34,7 @@ namespace IT_Academ_School
             int rowsCount = matrix.GetLength(0);
             int columnsCount = matrix.GetLength(1);
 
-            this.matrix = new Vector.Vector[rowsCount];
+            this.matrix = new Vector[rowsCount];
 
             for (int i = 0; i < rowsCount; i++)
             {
@@ -45,18 +45,18 @@ namespace IT_Academ_School
                     temp[j] = matrix[i, j];
                 }
 
-                this.matrix[i] = new Vector.Vector(temp);
+                this.matrix[i] = new Vector(temp);
             }
         }
 
-        public Matrix(Vector.Vector[] vectors)
+        public Matrix(Vector[] vectors)
         {
             int rowsCount = vectors.Length;
-            matrix = new Vector.Vector[rowsCount];
+            matrix = new Vector[rowsCount];
 
             for (int i = 0; i < rowsCount; i++)
             {
-                matrix[i] = new Vector.Vector(vectors[i]);
+                matrix[i] = new Vector(vectors[i]);
             }
         }
 
@@ -75,17 +75,17 @@ namespace IT_Academ_School
             return matrix[0].GetSize();
         }
 
-        public Vector.Vector GetRow(int rowsCount)
+        public Vector GetRow(int rowsCount)
         {
             return matrix[rowsCount];
         }
 
-        public void SetRow(int rowsCount, Vector.Vector vector)
+        public void SetRow(int rowsCount, Vector vector)
         {
-            matrix[rowsCount] = new Vector.Vector(vector);
+            matrix[rowsCount] = new Vector(vector);
         }
 
-        public Vector.Vector GetColumn(int columnsCount)
+        public Vector GetColumn(int columnsCount)
         {
             double[] temp = new double[matrix.Length];
 
@@ -94,12 +94,12 @@ namespace IT_Academ_School
                 temp[i] = matrix[i].GetElement(columnsCount);
             }
 
-            return new Vector.Vector(temp);
+            return new Vector(temp);
         }
 
         public Matrix Transpose()
         {
-            Vector.Vector[] temp = new Vector.Vector[matrix.Length];
+            Vector[] temp = new Vector[matrix.Length];
 
             for (int i = 0; i < matrix.Length; i++)
             {
@@ -127,7 +127,67 @@ namespace IT_Academ_School
             return this;
         }
 
-        public Matrix VectorMultiplication(Vector.Vector vector)
+        public double GetDeterminant()
+        {
+            return CalculateDeterminant(this);
+        }
+
+        private double CalculateDeterminant(Matrix matrix)
+        {
+            if (matrix.GetLength(0) == 2)
+            {
+                return matrix.GetRow(0).GetElement(0) * matrix.GetRow(1).GetElement(1) - matrix.GetRow(0).GetElement(1) * matrix.GetRow(1).GetElement(0);
+            }
+
+            double result = 0;
+            int i = 0;
+
+            for (int j = 0; j < matrix.GetLength(0); j++)
+            {
+                Matrix minor = GetMinor(matrix, i, j);
+                result += matrix.GetRow(0).GetElement(j) * Math.Pow(-1, (i + 1) + (i + j)) * CalculateDeterminant(minor);
+            }
+
+            return result;
+        }
+
+        private Matrix GetMinor(Matrix matrix, int row, int column)
+        {
+            if (matrix.GetLength(0) == 2)
+            {
+                return matrix;
+            }
+
+            double[,] temp = new double[matrix.GetLength(0) - 1, matrix.GetLength(1) - 1];
+            int rowCount = 0;
+
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                if (i == row)
+                {
+                    continue;
+                }
+
+                int columnCount = 0;
+
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                {
+                    if (j == column)
+                    {
+                        continue;
+                    }
+
+                    temp[rowCount, columnCount] = matrix.GetRow(i).GetElement(j);
+                    columnCount++;
+                }
+
+                rowCount++;
+            }
+
+            return new Matrix(temp);
+        }
+
+        public Matrix GetVectorMultiplication(Vector vector)
         {
             double[] temp = new double[vector.GetSize()];
 
@@ -143,7 +203,7 @@ namespace IT_Academ_School
                 temp[i] = sum;
             }
 
-            matrix = new Vector.Vector[1] { new Vector.Vector(temp) };
+            matrix = new Vector[] { new Vector(temp) };
 
             return this;
         }
@@ -228,12 +288,12 @@ namespace IT_Academ_School
             {
                 for (int j = 0; j < columnsCount; j++)
                 {
-                    Vector.Vector rowElements = matrix1.GetRow(i);
-                    Vector.Vector columnsElements = matrix2.GetColumn(j);
+                    Vector rowElements = matrix1.GetRow(i);
+                    Vector columnsElements = matrix2.GetColumn(j);
 
                     double elementsMultiplication = 0;
 
-                    for(int k = 0; k < rowElements.GetSize(); k++)
+                    for (int k = 0; k < rowElements.GetSize(); k++)
                     {
                         elementsMultiplication += rowElements.GetElement(k) * columnsElements.GetElement(k);
                     }
@@ -241,7 +301,7 @@ namespace IT_Academ_School
                     temp[i, j] = elementsMultiplication;
                 }
             }
-            
+
             return new Matrix(temp);
         }
 

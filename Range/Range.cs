@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IT_Academ_School
+namespace Range
 {
     public class Range
     {
@@ -74,7 +74,6 @@ namespace IT_Academ_School
             }
 
             return new Range[] { new Range(From, range.From), new Range(range.To, To) };
-
         }
 
         public override string ToString()
@@ -82,21 +81,14 @@ namespace IT_Academ_School
             return $"({From}; {To})";
         }
 
-        public static string Print(params Range[] ranges)
+        public static string GetString(params Range[] ranges)
         {
-            if (ranges[0] == null)
+            if (ranges.Length == 0)
             {
                 return "[]";
             }
 
-            string[] rangesRepresentation = new string[ranges.Length];
-
-            for (int i = 0; i < ranges.Length; i++)
-            {
-                rangesRepresentation[i] = ranges[i].ToString();
-            }
-
-            return $"[{string.Join(",", rangesRepresentation)}]";
+            return $"[{string.Join<Range>(", ", ranges)}]";
         }
     }
 }

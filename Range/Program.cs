@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IT_Academ_School
+namespace Range
 {
     class Program
     {
@@ -10,13 +10,13 @@ namespace IT_Academ_School
             Range range2 = new Range(3, 5);
 
             Range intersection = range1.GetIntersection(range2);
-            Console.WriteLine($"Пересечение интервалов {range1} и {range2}: {Environment.NewLine}{Range.Print(intersection)}");
+            Console.WriteLine($"Пересечение интервалов {range1} и {range2}: {Environment.NewLine}{Range.GetString(intersection)}");
 
             Range[] union = range1.GetUnion(range2);
-            Console.WriteLine($"Объединение интервалов {range1} и {range2}: {Environment.NewLine}{Range.Print(union)}");
+            Console.WriteLine($"Объединение интервалов {range1} и {range2}: {Environment.NewLine}{Range.GetString(union)}");
 
             Range[] difference = range1.GetDifference(range2);
-            Console.WriteLine($"Разность интервалов {range1} и {range2}: {Environment.NewLine}{Range.Print(difference)}");
+            Console.WriteLine($"Разность интервалов {range1} и {range2}: {Environment.NewLine}{Range.GetString(difference)}");
         }
     }
 }

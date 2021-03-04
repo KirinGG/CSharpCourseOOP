@@ -9,7 +9,7 @@ using System.Collections.Generic;
    но без повторений Например, был список [1, 5, 2, 1, 3, 5], должен получиться новый список [1, 5, 2, 3].
 */
 
-namespace IT_Academ_School
+namespace ArrayListHome
 {
     class Program
     {
@@ -17,6 +17,13 @@ namespace IT_Academ_School
         {
             List<string> list = new List<string>();
             ReadFileToList(ref list, "..\\..\\..\\in.txt");
+
+            List<int> numbers = new List<int> { 1, 2, 3, 4, 5, 5, 5, 5, 6, 7, 8, 9 };
+            RemoveEvenNumbers(numbers);
+            Console.WriteLine(string.Join(", ", numbers));
+
+            RemoveDuplicateNumbers(ref numbers);
+            Console.WriteLine(string.Join(", ", numbers));
         }
 
         public static void ReadFileToList(ref List<string> list, string filePath)
@@ -30,6 +37,33 @@ namespace IT_Academ_School
                     list.Add(currentLine);
                 }
             }
+        }
+
+        public static void RemoveEvenNumbers(List<int> numbers)
+        {
+            for (int i = 0; i < numbers.Count; i++)
+            {
+                if (numbers[i] % 2 == 0)
+                {
+                    numbers.RemoveAt(i);
+                    i--;
+                }
+            }
+        }
+
+        public static void RemoveDuplicateNumbers(ref List<int> numbers)
+        {
+            List<int> numbersWithoutRepetitions = new List<int>();
+
+            foreach (int number in numbers)
+            {
+                if (!numbersWithoutRepetitions.Contains(number))
+                {
+                    numbersWithoutRepetitions.Add(number);
+                }
+            }
+
+            numbers = numbersWithoutRepetitions;
         }
     }
 }

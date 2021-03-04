@@ -1,10 +1,13 @@
-﻿namespace IT_Academ_School
+﻿namespace Shape.Shapes
 {
     interface IShape
     {
         double GetWidth();
+
         double GetHeight();
+
         double GetArea();
+
         double GetPerimeter();
     }
 }

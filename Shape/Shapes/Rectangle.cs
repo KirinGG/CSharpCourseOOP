@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace IT_Academ_School
+﻿namespace Shape.Shapes
 {
     class Rectangle : IShape
     {
@@ -36,7 +34,7 @@ namespace IT_Academ_School
 
         public override string ToString()
         {
-            return $"Rectangle. Height - {Height}; Width - {Width}.";
+            return $"Rectangle. Height: {Height}; Width: {Width}.";
         }
 
         public override int GetHashCode()
@@ -64,12 +62,7 @@ namespace IT_Academ_School
 
             Rectangle rectangle = obj as Rectangle;
 
-            if ((Height != rectangle.Height) || (Width != rectangle.Width))
-            {
-                return false;
-            }
-
-            return true;
+            return (Height == rectangle.Height) && (Width == rectangle.Width);
         }
     }
 }

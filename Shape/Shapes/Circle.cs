@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IT_Academ_School
+namespace Shape.Shapes
 {
     class Circle : IShape
     {
@@ -33,7 +33,7 @@ namespace IT_Academ_School
 
         public override string ToString()
         {
-            return $"Circle. Radius - {Radius}.";
+            return $"Circle. Radius: {Radius}.";
         }
 
         public override int GetHashCode()

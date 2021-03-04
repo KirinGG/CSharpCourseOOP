@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace IT_Academ_School
+﻿namespace Shape.Shapes
 {
     class Square : IShape
     {
@@ -8,7 +6,7 @@ namespace IT_Academ_School
 
         public Square(double sideLength)
         {
-            this.SideLength = sideLength;
+            SideLength = sideLength;
         }
 
         public double GetArea()
@@ -33,7 +31,7 @@ namespace IT_Academ_School
 
         public override string ToString()
         {
-            return $"Square. Side length - {SideLength}.";
+            return $"Square. Side length: {SideLength}.";
         }
 
         public override int GetHashCode()

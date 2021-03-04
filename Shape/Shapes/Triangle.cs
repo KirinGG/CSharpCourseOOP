@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IT_Academ_School
+namespace Shape.Shapes
 {
     class Triangle : IShape
     {
@@ -8,8 +8,12 @@ namespace IT_Academ_School
         private double sideBCLength;
         private double sideCALength;
 
-        private double x1, x2, x3;
-        private double y1, y2, y3;
+        private double x1;
+        private double x2;
+        private double x3;
+        private double y1;
+        private double y2;
+        private double y3;
 
         public double X1
         {
@@ -111,15 +115,14 @@ namespace IT_Academ_School
 
         public double GetArea()
         {
-            double halfPerimeter = this.GetPerimeter() / 2;
-            double area = Math.Sqrt(halfPerimeter * (halfPerimeter - sideABLength) * (halfPerimeter - sideBCLength) * (halfPerimeter - sideCALength));
+            double halfPerimeter = GetPerimeter() / 2;
 
-            return area;
+            return Math.Sqrt(halfPerimeter * (halfPerimeter - sideABLength) * (halfPerimeter - sideBCLength) * (halfPerimeter - sideCALength));
         }
 
         public double GetHeight()
         {
-            return GetMax(y1, y2, y3);
+            return GetMax(y1, y2, y3) - GetMin(y1, y2, y3);
         }
 
         public double GetPerimeter()
@@ -129,7 +132,7 @@ namespace IT_Academ_School
 
         public double GetWidth()
         {
-            return GetMax(x1, x2, x3);
+            return GetMax(x1, x2, x3) - GetMin(x1, x2, x3);
         }
 
         private void CalculateSideABLength()
@@ -160,9 +163,24 @@ namespace IT_Academ_School
             return max;
         }
 
+        private double GetMin(params double[] parameters)
+        {
+            double min = parameters[0];
+
+            foreach (double parametr in parameters)
+            {
+                if (parametr < min)
+                {
+                    min = parametr;
+                }
+            }
+
+            return min;
+        }
+
         public override string ToString()
         {
-            return $"Triangle. Coordinates: {{{x1},{y1}}},{{{x2},{y2}}},{{{x3},{y3}}}";
+            return $"Triangle. Coordinates: {{{x1}, {y1}}}, {{{x2}, {y2}}}, {{{x3}, {y3}}}";
         }
 
         public override int GetHashCode()
@@ -194,12 +212,7 @@ namespace IT_Academ_School
 
             Triangle triangle = obj as Triangle;
 
-            if (x1 != triangle.x1 || x2 != triangle.x2 || x3 != triangle.x3 || y1 != triangle.y1 || y2 != triangle.y2 || y3 != triangle.y3)
-            {
-                return false;
-            }
-
-            return true;
+            return (x1 == triangle.x1) && (x2 == triangle.x2) && (x3 == triangle.x3) && (y1 == triangle.y1) && (y2 == triangle.y2) && (y3 == triangle.y3);
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
+using Shape.Comparer;
+using Shape.Shapes;
 
-namespace IT_Academ_School
+namespace Shape
 {
     class Program
     {
@@ -18,7 +20,7 @@ namespace IT_Academ_School
             Array.Sort(shapes, new AreaComparer());
             Console.WriteLine($"The shape with the largest area - {shapes[shapes.Length - 1]}");
 
-            Array.Sort(shapes, new PerimetrComparer());
+            Array.Sort(shapes, new PerimeterComparer());
             Console.WriteLine($"The shape with the second largest perimeter - {shapes[shapes.Length - 2]}");
         }
     }

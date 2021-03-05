@@ -1,6 +1,7 @@
 ﻿using System;
+using Vectors;
 
-namespace IT_Academ_School
+namespace Matrix
 {
     class Matrix
     {
@@ -91,7 +92,7 @@ namespace IT_Academ_School
 
             for (int i = 0; i < matrix.Length; i++)
             {
-                temp[i] = matrix[i].GetElement(columnsCount);
+                temp[i] = matrix[i].GetComponent(columnsCount);
             }
 
             return new Vector(temp);
@@ -120,7 +121,7 @@ namespace IT_Academ_School
             {
                 for (int j = 0; j < matrix[i].GetSize(); j++)
                 {
-                    matrix[i].SetElement(j, matrix[i].GetElement(j) * scalar);
+                    matrix[i].SetComponent(j, matrix[i].GetComponent(j) * scalar);
                 }
             }
 
@@ -136,7 +137,7 @@ namespace IT_Academ_School
         {
             if (matrix.GetLength(0) == 2)
             {
-                return matrix.GetRow(0).GetElement(0) * matrix.GetRow(1).GetElement(1) - matrix.GetRow(0).GetElement(1) * matrix.GetRow(1).GetElement(0);
+                return matrix.GetRow(0).GetComponent(0) * matrix.GetRow(1).GetComponent(1) - matrix.GetRow(0).GetComponent(1) * matrix.GetRow(1).GetComponent(0);
             }
 
             double result = 0;
@@ -145,7 +146,7 @@ namespace IT_Academ_School
             for (int j = 0; j < matrix.GetLength(0); j++)
             {
                 Matrix minor = GetMinor(matrix, i, j);
-                result += matrix.GetRow(0).GetElement(j) * Math.Pow(-1, (i + 1) + (i + j)) * CalculateDeterminant(minor);
+                result += matrix.GetRow(0).GetComponent(j) * Math.Pow(-1, (i + 1) + (i + j)) * CalculateDeterminant(minor);
             }
 
             return result;
@@ -177,7 +178,7 @@ namespace IT_Academ_School
                         continue;
                     }
 
-                    temp[rowCount, columnCount] = matrix.GetRow(i).GetElement(j);
+                    temp[rowCount, columnCount] = matrix.GetRow(i).GetComponent(j);
                     columnCount++;
                 }
 
@@ -197,7 +198,7 @@ namespace IT_Academ_School
 
                 for (int j = 0; j < vector.GetSize(); j++)
                 {
-                    sum += matrix[i].GetElement(j) * vector.GetElement(j);
+                    sum += matrix[i].GetComponent(j) * vector.GetComponent(j);
                 }
 
                 temp[i] = sum;
@@ -217,8 +218,8 @@ namespace IT_Academ_School
             {
                 for (int j = 0; j < columnsCount; j++)
                 {
-                    double elementsAmount = this.matrix[i].GetElement(j) + matrix.GetRow(i).GetElement(j);
-                    this.matrix[i].SetElement(j, elementsAmount);
+                    double elementsAmount = this.matrix[i].GetComponent(j) + matrix.GetRow(i).GetComponent(j);
+                    this.matrix[i].SetComponent(j, elementsAmount);
                 }
             }
 
@@ -234,8 +235,8 @@ namespace IT_Academ_School
             {
                 for (int j = 0; j < columnsCount; j++)
                 {
-                    double elementsDifference = this.matrix[i].GetElement(j) - matrix.GetRow(i).GetElement(j);
-                    this.matrix[i].SetElement(j, elementsDifference);
+                    double elementsDifference = this.matrix[i].GetComponent(j) - matrix.GetRow(i).GetComponent(j);
+                    this.matrix[i].SetComponent(j, elementsDifference);
                 }
             }
 
@@ -252,7 +253,7 @@ namespace IT_Academ_School
             {
                 for (int j = 0; j < columnsCount; j++)
                 {
-                    double elementsAmount = matrix1.GetRow(i).GetElement(j) + matrix2.GetRow(i).GetElement(j);
+                    double elementsAmount = matrix1.GetRow(i).GetComponent(j) + matrix2.GetRow(i).GetComponent(j);
                     temp[i, j] = elementsAmount;
                 }
             }
@@ -270,7 +271,7 @@ namespace IT_Academ_School
             {
                 for (int j = 0; j < columnsCount; j++)
                 {
-                    double elementsDifference = matrix1.GetRow(i).GetElement(j) - matrix2.GetRow(i).GetElement(j);
+                    double elementsDifference = matrix1.GetRow(i).GetComponent(j) - matrix2.GetRow(i).GetComponent(j);
                     temp[i, j] = elementsDifference;
                 }
             }
@@ -295,7 +296,7 @@ namespace IT_Academ_School
 
                     for (int k = 0; k < rowElements.GetSize(); k++)
                     {
-                        elementsMultiplication += rowElements.GetElement(k) * columnsElements.GetElement(k);
+                        elementsMultiplication += rowElements.GetComponent(k) * columnsElements.GetComponent(k);
                     }
 
                     temp[i, j] = elementsMultiplication;

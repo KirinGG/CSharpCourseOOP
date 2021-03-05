@@ -1,6 +1,7 @@
 ﻿using System;
+using Vectors;
 
-namespace IT_Academ_School
+namespace Matrix
 {
     class Program
     {

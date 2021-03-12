@@ -137,18 +137,23 @@ namespace Shape.Shapes
 
         private void CalculateSideABLength()
         {
-            sideABLength = Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2));
+            sideABLength = CalculateSideLength(X1, X2, Y1, Y2);
         }
         private void CalculateSideBCLength()
         {
-            sideBCLength = Math.Sqrt(Math.Pow(x3 - x2, 2) + Math.Pow(y3 - y2, 2));
+            sideBCLength = CalculateSideLength(X2, X3, Y2, Y3);
         }
         private void CalculateSideCALength()
         {
-            sideCALength = Math.Sqrt(Math.Pow(x1 - x3, 2) + Math.Pow(y1 - y3, 2));
+            sideCALength = CalculateSideLength(X3, X1, Y3, Y1);
         }
 
-        private double GetMax(params double[] parameters)
+        private static double CalculateSideLength(double x1, double x2, double y1, double y2)
+        {
+            return Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2));
+        }
+
+        private static double GetMax(params double[] parameters)
         {
             double max = parameters[0];
 
@@ -163,15 +168,15 @@ namespace Shape.Shapes
             return max;
         }
 
-        private double GetMin(params double[] parameters)
+        private static double GetMin(params double[] parameters)
         {
             double min = parameters[0];
 
-            foreach (double parametr in parameters)
+            foreach (double parameter in parameters)
             {
-                if (parametr < min)
+                if (parameter < min)
                 {
-                    min = parametr;
+                    min = parameter;
                 }
             }
 
@@ -210,7 +215,7 @@ namespace Shape.Shapes
                 return false;
             }
 
-            Triangle triangle = obj as Triangle;
+            Triangle triangle = (Triangle)obj;
 
             return (x1 == triangle.x1) && (x2 == triangle.x2) && (x3 == triangle.x3) && (y1 == triangle.y1) && (y2 == triangle.y2) && (y3 == triangle.y3);
         }

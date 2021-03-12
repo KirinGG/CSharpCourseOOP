@@ -53,7 +53,7 @@ namespace Shape.Shapes
                 return false;
             }
 
-            Circle circle = obj as Circle;
+            Circle circle = (Circle)obj;
 
             return Radius == circle.Radius;
         }

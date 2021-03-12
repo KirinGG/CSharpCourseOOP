@@ -51,7 +51,7 @@
                 return false;
             }
 
-            Square square = obj as Square;
+            Square square = (Square)obj;
 
             return SideLength == square.SideLength;    
         }

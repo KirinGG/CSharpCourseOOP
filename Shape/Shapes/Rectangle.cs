@@ -60,7 +60,7 @@
                 return false;
             }
 
-            Rectangle rectangle = obj as Rectangle;
+            Rectangle rectangle = (Rectangle)obj;
 
             return (Height == rectangle.Height) && (Width == rectangle.Width);
         }

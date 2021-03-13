@@ -195,7 +195,7 @@ namespace Vectors
             int prime = 37;
             int hash = 1;
 
-            foreach(double component in components)
+            foreach (double component in components)
             {
                 hash = prime * hash + component.GetHashCode();
             }

@@ -11,7 +11,7 @@ namespace Vectors
         {
             if (size <= 0)
             {
-                throw new ArgumentException($"The size of the vector must be > 0. Current value - {size}.", nameof(size));
+                throw new ArgumentException($"The size of the vector must be > 0. Current value: {size}.", nameof(size));
             }
 
             components = new double[size];
@@ -25,6 +25,11 @@ namespace Vectors
 
         public Vector(double[] components)
         {
+            if (components.Length == 0)
+            {
+                throw new ArgumentException($"The size of the array must be > 0. Current value: {components.Length}.", nameof(components));
+            }
+
             this.components = new double[components.Length];
             Array.Copy(components, this.components, components.Length);
         }
@@ -33,11 +38,19 @@ namespace Vectors
         {
             if (size <= 0)
             {
-                throw new ArgumentException($"The size of the vector must be > 0. Current value - {size}.", nameof(size));
+                throw new ArgumentException($"The size of the vector must be > 0. Current value: {size}.", nameof(size));
             }
 
             this.components = new double[size];
-            Array.Copy(components, this.components, size);
+
+            if (size > components.Length)
+            {
+                Array.Copy(components, this.components, components.Length);
+            }
+            else
+            {
+                Array.Copy(components, this.components, size);
+            }
         }
 
         public int GetSize()
@@ -47,9 +60,9 @@ namespace Vectors
 
         public double GetComponent(int index)
         {
-            if (index < 0 || index > components.Length)
+            if (index < 0 || index >= components.Length)
             {
-                throw new ArgumentOutOfRangeException(nameof(index), $"The index goes beyond the boundary[0,{components.Length - 1}] of the vector. Current index value - {index}.");
+                throw new ArgumentOutOfRangeException(nameof(index), $"The index goes beyond the boundary [0, {components.Length - 1}] of the vector. Current index value: {index}.");
             }
 
             return components[index];
@@ -57,9 +70,9 @@ namespace Vectors
 
         public void SetComponent(int index, double value)
         {
-            if (index < 0 || index > components.Length)
+            if (index < 0 || index >= components.Length)
             {
-                throw new ArgumentOutOfRangeException(nameof(index), $"The index goes beyond the boundary[0,{components.Length - 1}] of the vector. Current index value - {index}.");
+                throw new ArgumentOutOfRangeException(nameof(index), $"The index goes beyond the boundary [0, {components.Length - 1}] of the vector. Current index value: {index}.");
             }
 
             components[index] = value;
@@ -91,11 +104,9 @@ namespace Vectors
 
         private void Resize(Vector vector)
         {
-            int maxLength = Math.Max(vector.components.Length, components.Length);
-
             if (components.Length < vector.components.Length)
             {
-                Array.Resize(ref components, maxLength);
+                Array.Resize(ref components, vector.components.Length);
             }
         }
 
@@ -116,7 +127,7 @@ namespace Vectors
             return this;
         }
 
-        public static Vector GetAmount(Vector vector1, Vector vector2)
+        public static Vector GetSum(Vector vector1, Vector vector2)
         {
             return new Vector(vector1).Add(vector2);
         }
@@ -126,17 +137,22 @@ namespace Vectors
             return new Vector(vector1).Subtract(vector2);
         }
 
-        public static double GetScalarMultiplication(Vector vector1, Vector vector2)
+        public static double GetScalarProduct(Vector vector1, Vector vector2)
         {
-            int maxLength = Math.Max(vector1.components.Length, vector2.components.Length);
-            double scalarMultiplication = 0;
-
-            for (int i = 0; i < maxLength; i++)
+            if (vector1.GetSize() != vector2.GetSize())
             {
-                scalarMultiplication += vector1.components[i] * vector2.components[i];
+                throw new ArgumentException($"The size of the vectors must match. vector1: {vector1.GetSize()}, vector2: {vector2.GetSize()}.");
             }
 
-            return scalarMultiplication;
+            int maxSize = Math.Max(vector1.components.Length, vector2.components.Length);
+            double scalarProduct = 0;
+
+            for (int i = 0; i < maxSize; i++)
+            {
+                scalarProduct += vector1.components[i] * vector2.components[i];
+            }
+
+            return scalarProduct;
         }
 
         public override string ToString()
@@ -179,7 +195,12 @@ namespace Vectors
             int prime = 37;
             int hash = 1;
 
-            return prime * hash + components.GetHashCode();
+            foreach(double component in components)
+            {
+                hash = prime * hash + component.GetHashCode();
+            }
+
+            return hash;
         }
     }
 }

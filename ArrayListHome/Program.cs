@@ -15,28 +15,42 @@ namespace ArrayListHome
     {
         static void Main(string[] args)
         {
-            List<string> list = new List<string>();
-            ReadFileToList(ref list, "..\\..\\..\\in.txt");
+            List<string> listFileLines = GetListFileLines("..\\..\\..\\in.txt");
+
+            foreach (string item in listFileLines)
+            {
+                Console.WriteLine(item);
+            }
 
             List<int> numbers = new List<int> { 1, 2, 3, 4, 5, 5, 5, 5, 6, 7, 8, 9 };
+
             RemoveEvenNumbers(numbers);
             Console.WriteLine(string.Join(", ", numbers));
 
-            RemoveDuplicateNumbers(ref numbers);
-            Console.WriteLine(string.Join(", ", numbers));
+            List<int> numbersWithoutRepetitions = GetNumbersWithoutRepetitions(numbers);
+            Console.WriteLine(string.Join(", ", numbersWithoutRepetitions));
         }
 
-        public static void ReadFileToList(ref List<string> list, string filePath)
+        public static List<string> GetListFileLines(string filePath)
         {
-            using (StreamReader reader = new StreamReader(filePath))
+            List<string> listFileLines = new List<string>();
+
+            try
             {
+                using StreamReader reader = new StreamReader(filePath);
                 string currentLine;
 
                 while ((currentLine = reader.ReadLine()) != null)
                 {
-                    list.Add(currentLine);
+                    listFileLines.Add(currentLine);
                 }
             }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"Не удалось загрузить данные из файла в список по причине: {ex}.");
+            }
+
+            return listFileLines;
         }
 
         public static void RemoveEvenNumbers(List<int> numbers)
@@ -51,9 +65,10 @@ namespace ArrayListHome
             }
         }
 
-        public static void RemoveDuplicateNumbers(ref List<int> numbers)
+        public static List<int> GetNumbersWithoutRepetitions(List<int> numbers)
         {
             List<int> numbersWithoutRepetitions = new List<int>();
+            numbersWithoutRepetitions.Capacity = numbers.Count;
 
             foreach (int number in numbers)
             {
@@ -63,7 +78,7 @@ namespace ArrayListHome
                 }
             }
 
-            numbers = numbersWithoutRepetitions;
+            return numbersWithoutRepetitions;
         }
     }
 }

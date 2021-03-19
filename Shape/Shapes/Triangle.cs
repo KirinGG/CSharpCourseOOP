@@ -139,16 +139,18 @@ namespace Shape.Shapes
         {
             sideABLength = CalculateSideLength(X1, X2, Y1, Y2);
         }
+
         private void CalculateSideBCLength()
         {
             sideBCLength = CalculateSideLength(X2, X3, Y2, Y3);
         }
+
         private void CalculateSideCALength()
         {
             sideCALength = CalculateSideLength(X3, X1, Y3, Y1);
         }
 
-        private static double CalculateSideLength(double x1, double x2, double y1, double y2)
+        private static double CalculateSideLength(double x1, double y1, double x2, double y2)
         {
             return Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2));
         }
@@ -157,11 +159,11 @@ namespace Shape.Shapes
         {
             double max = parameters[0];
 
-            foreach (double parametr in parameters)
+            foreach (double parameter in parameters)
             {
-                if (parametr > max)
+                if (parameter > max)
                 {
-                    max = parametr;
+                    max = parameter;
                 }
             }
 

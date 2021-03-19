@@ -15,7 +15,7 @@ namespace ArrayListHome
     {
         static void Main(string[] args)
         {
-            List<string> listFileLines = GetListFileLines("..\\..\\..\\in.txt");
+            List<string> listFileLines = GetFileLinesList("..\\..\\..\\in.txt");
 
             foreach (string item in listFileLines)
             {
@@ -27,13 +27,13 @@ namespace ArrayListHome
             RemoveEvenNumbers(numbers);
             Console.WriteLine(string.Join(", ", numbers));
 
-            List<int> numbersWithoutRepetitions = GetNumbersWithoutRepetitions(numbers);
+            List<int> numbersWithoutRepetitions = GetNumbersWithoutRepetitions(numbers, numbers.Count);
             Console.WriteLine(string.Join(", ", numbersWithoutRepetitions));
         }
 
-        public static List<string> GetListFileLines(string filePath)
+        public static List<string> GetFileLinesList(string filePath)
         {
-            List<string> listFileLines = new List<string>();
+            List<string> fileLinesList = new List<string>();
 
             try
             {
@@ -42,15 +42,15 @@ namespace ArrayListHome
 
                 while ((currentLine = reader.ReadLine()) != null)
                 {
-                    listFileLines.Add(currentLine);
+                    fileLinesList.Add(currentLine);
                 }
             }
             catch (IOException ex)
             {
-                Console.WriteLine($"Не удалось загрузить данные из файла в список по причине: {ex}.");
+                Console.WriteLine($"Не удалось загрузить данные из файла в список по причине: {ex.Message}.");
             }
 
-            return listFileLines;
+            return fileLinesList;
         }
 
         public static void RemoveEvenNumbers(List<int> numbers)
@@ -65,10 +65,9 @@ namespace ArrayListHome
             }
         }
 
-        public static List<int> GetNumbersWithoutRepetitions(List<int> numbers)
+        public static List<int> GetNumbersWithoutRepetitions(List<int> numbers, int capacity)
         {
-            List<int> numbersWithoutRepetitions = new List<int>();
-            numbersWithoutRepetitions.Capacity = numbers.Count;
+            List<int> numbersWithoutRepetitions = new List<int>(capacity);
 
             foreach (int number in numbers)
             {

@@ -131,15 +131,10 @@ namespace Vectors
 
         public static double GetScalarProduct(Vector vector1, Vector vector2)
         {
-            if (vector1.GetSize() != vector2.GetSize())
-            {
-                throw new ArgumentException($"The size of the vectors must match. vector1: {vector1.GetSize()}, vector2: {vector2.GetSize()}.");
-            }
-
-            int maxSize = Math.Max(vector1.components.Length, vector2.components.Length);
+            int minSize = Math.Min(vector1.components.Length, vector2.components.Length);
             double scalarProduct = 0;
 
-            for (int i = 0; i < maxSize; i++)
+            for (int i = 0; i < minSize; i++)
             {
                 scalarProduct += vector1.components[i] * vector2.components[i];
             }

@@ -15,9 +15,9 @@ namespace ArrayListHome
     {
         static void Main(string[] args)
         {
-            List<string> listFileLines = GetFileLinesList("..\\..\\..\\in.txt");
+            List<string> fileLinesList = GetFileLinesList("..\\..\\..\\in.txt");
 
-            foreach (string item in listFileLines)
+            foreach (string item in fileLinesList)
             {
                 Console.WriteLine(item);
             }
@@ -27,7 +27,7 @@ namespace ArrayListHome
             RemoveEvenNumbers(numbers);
             Console.WriteLine(string.Join(", ", numbers));
 
-            List<int> numbersWithoutRepetitions = GetNumbersWithoutRepetitions(numbers, numbers.Count);
+            List<int> numbersWithoutRepetitions = GetNumbersWithoutRepetitions(numbers);
             Console.WriteLine(string.Join(", ", numbersWithoutRepetitions));
         }
 
@@ -65,9 +65,9 @@ namespace ArrayListHome
             }
         }
 
-        public static List<int> GetNumbersWithoutRepetitions(List<int> numbers, int capacity)
+        public static List<int> GetNumbersWithoutRepetitions(List<int> numbers)
         {
-            List<int> numbersWithoutRepetitions = new List<int>(capacity);
+            List<int> numbersWithoutRepetitions = new List<int>(numbers.Count);
 
             foreach (int number in numbers)
             {

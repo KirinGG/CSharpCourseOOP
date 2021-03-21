@@ -42,15 +42,7 @@ namespace Vectors
             }
 
             this.components = new double[size];
-
-            if (size > components.Length)
-            {
-                Array.Copy(components, this.components, components.Length);
-            }
-            else
-            {
-                Array.Copy(components, this.components, size);
-            }
+            Array.Copy(components, this.components, Math.Min(components.Length, size));         
         }
 
         public int GetSize()

@@ -137,17 +137,17 @@ namespace Shape.Shapes
 
         private void CalculateSideABLength()
         {
-            sideABLength = CalculateSideLength(X1, X2, Y1, Y2);
+            sideABLength = CalculateSideLength(X1, Y1, X2, Y2);
         }
 
         private void CalculateSideBCLength()
         {
-            sideBCLength = CalculateSideLength(X2, X3, Y2, Y3);
+            sideBCLength = CalculateSideLength(X2, Y2, X3, Y3);
         }
 
         private void CalculateSideCALength()
         {
-            sideCALength = CalculateSideLength(X3, X1, Y3, Y1);
+            sideCALength = CalculateSideLength(X3, Y3, X1, Y1);
         }
 
         private static double CalculateSideLength(double x1, double y1, double x2, double y2)

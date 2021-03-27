@@ -10,9 +10,12 @@ namespace SinglyLinkedList
 
             for (int i = 0; i < 10; i++)
             {
-                list.Add(i.ToString());
+                list.AddFirst(i.ToString());
             }
+            
+            Console.WriteLine(list);
 
+            list.RemoveFirst();
             Console.WriteLine(list);
 
             list.Remove("5");
@@ -20,6 +23,8 @@ namespace SinglyLinkedList
 
             list.Reverse();
             Console.WriteLine(list);
+
+            Console.WriteLine(list.Copy());
         }
     }
 }

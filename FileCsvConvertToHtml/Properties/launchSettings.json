@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "FileCsvConvertToHtml": {
+      "commandName": "Project",
+      "commandLineArgs": "..\\\\..\\\\..\\\\in.txt ..\\\\..\\\\..\\\\out.html"
+    }
+  }
+}

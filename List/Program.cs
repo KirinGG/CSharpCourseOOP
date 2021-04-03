@@ -12,11 +12,13 @@ namespace SinglyLinkedList
             {
                 list.AddFirst(i.ToString());
             }
-            
+
             Console.WriteLine(list);
 
             list.RemoveFirst();
             Console.WriteLine(list);
+
+            list.AddFirst(null);
 
             list.Remove("5");
             Console.WriteLine(list);
@@ -25,6 +27,15 @@ namespace SinglyLinkedList
             Console.WriteLine(list);
 
             Console.WriteLine(list.Copy());
+
+            list.Insert(3, "66");
+            Console.WriteLine(list);
+
+            list.Remove(null);
+            Console.WriteLine(list);
+
+            list.Insert(list.Count - 1, "33");
+            Console.WriteLine(list);
         }
     }
 }

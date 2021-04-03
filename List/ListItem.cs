@@ -20,7 +20,7 @@ namespace SinglyLinkedList
 
         public override string ToString()
         {
-            if(Data == null)
+            if (Data == null)
             {
                 return "null";
             }

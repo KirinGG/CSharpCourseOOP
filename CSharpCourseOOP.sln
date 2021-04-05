@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shape", "Shape\Shape.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vectors", "Vector\Vectors.csproj", "{94C3C891-1471-4C86-BD32-A7EBCEA0B787}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Matrix", "Matrix\Matrix.csproj", "{9D305507-AB58-426A-BE50-E38ECFBC7849}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Matrixes", "Matrix\Matrixes.csproj", "{9D305507-AB58-426A-BE50-E38ECFBC7849}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileCsvConvertToHtml", "FileCsvConvertToHtml\FileCsvConvertToHtml.csproj", "{C231EA2A-FDEF-481E-B1CD-76910A00CBB3}"
 EndProject
@@ -21,9 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArrayList", "ArrayList\Arra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tree", "Tree\Tree.csproj", "{66EA306A-9166-4019-A63F-0DB47EDCF61C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashTables", "HashTable\HashTables.csproj", "{59ECA923-A532-4A52-B341-D54BCFF83EE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HashTables", "HashTable\HashTables.csproj", "{59ECA923-A532-4A52-B341-D54BCFF83EE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lambdas", "Lambdas\Lambdas.csproj", "{66058F72-B52F-409B-B4AB-D55813A803BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lambdas", "Lambdas\Lambdas.csproj", "{66058F72-B52F-409B-B4AB-D55813A803BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

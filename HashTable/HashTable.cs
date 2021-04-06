@@ -26,6 +26,8 @@ namespace HashTables
                 {
                     modificationsNumber = 0;
                 }
+
+                modificationsNumber = value;
             }
         }
 

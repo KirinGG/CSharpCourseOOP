@@ -28,10 +28,10 @@ namespace Lambdas
             var elementsCount = Convert.ToInt32(Console.ReadLine());
 
             Console.WriteLine("Корни:");
-            PrintTakeRoot(elementsCount);
+            PrintSquareRoots(elementsCount);
 
             Console.WriteLine("Числа Фибоначчи:");
-            PrintTakeFibonacciNumber(elementsCount);
+            PrintFibonacciNumbers(elementsCount);
         }
 
         public static IEnumerable<double> GetSquareRoots()
@@ -84,12 +84,12 @@ namespace Lambdas
         public static void PrintPersonsByAge(Person[] persons)
         {
             var personsByAge = persons
-                 .GroupBy(g => g.Name)
-                 .ToDictionary(p => p.Key, p => p.Average(p => p.Age));
+                 .GroupBy(p => p.Name)
+                 .ToDictionary(g => g.Key, g => g.Average(g => g.Age));
 
-            foreach (var keyValue in personsByAge)
+            foreach (var keyValuePair in personsByAge)
             {
-                Console.WriteLine(keyValue.Key + " - " + keyValue.Value);
+                Console.WriteLine(keyValuePair.Key + " - " + keyValuePair.Value);
             }
         }
 
@@ -102,35 +102,19 @@ namespace Lambdas
             Console.WriteLine($"Люди, возраст которых от 20 до 45: {string.Join(", ", middleAgedPersons.Select(p => p.Name))}.");
         }
 
-        public static void PrintTakeRoot(int elementsCount)
+        public static void PrintSquareRoots(int elementsCount)
         {
-            var i = 0;
-
-            foreach (double element in GetSquareRoots())
+            foreach (var element in GetSquareRoots().Take(elementsCount))
             {
-                if (i == elementsCount)
-                {
-                    break;
-                }
-
                 Console.WriteLine(element);
-                i++;
             }
         }
 
-        public static void PrintTakeFibonacciNumber(int elementsCount)
+        public static void PrintFibonacciNumbers(int elementsCount)
         {
-            var i = 0;
-
-            foreach (double element in GetFibonacciNumbers())
+            foreach (var element in GetFibonacciNumbers().Take(elementsCount))
             {
-                if (i == elementsCount)
-                {
-                    break;
-                }
-
                 Console.WriteLine(element);
-                i++;
             }
         }
     }

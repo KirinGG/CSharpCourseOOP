@@ -11,9 +11,11 @@ namespace HashTables
             hashTable.Add("101");
             hashTable.Add("5");
             hashTable.Add("1");
+            hashTable.Add(null);
             Console.WriteLine(hashTable);
 
             hashTable.Remove("7");
+            hashTable.Remove(null);
             Console.WriteLine(hashTable);
 
             string[] array = new string[hashTable.Count + 2];

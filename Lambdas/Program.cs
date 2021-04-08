@@ -78,14 +78,14 @@ namespace Lambdas
                 .Where(p => p.Age < 18)
                 .ToList();
 
-            Console.WriteLine($"Список людей младше 18: {string.Join(", ", youngPersons.Select(p => p.Name))} средний возраст составляет:{youngPersons.Average(p => p.Age)}.");
+            Console.WriteLine($"Список людей младше 18: {string.Join(", ", youngPersons.Select(p => p.Name))} средний возраст составляет: {youngPersons.Average(p => p.Age)}.");
         }
 
         public static void PrintPersonsByAge(Person[] persons)
         {
             var personsByAge = persons
                  .GroupBy(p => p.Name)
-                 .ToDictionary(g => g.Key, g => g.Average(g => g.Age));
+                 .ToDictionary(g => g.Key, g => g.Average(p1 => p1.Age));
 
             foreach (var keyValuePair in personsByAge)
             {

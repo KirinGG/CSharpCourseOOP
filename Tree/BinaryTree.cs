@@ -3,81 +3,79 @@ using System.Collections.Generic;
 
 namespace Tree
 {
-    class BinaryTree<T> where T : IComparable<T>
+    class BinaryTree<T>
     {
-        public TreeNode<T> head;
+        private TreeNode<T> root;
+        private IComparer<T> comparer;
 
-        public int Count { get; set; }
+        public BinaryTree(IComparer<T> comparer = null)
+        {
+            this.comparer = comparer;
+        }
+
+        public int Count { get; private set; }
 
         public void Add(T data)
         {
-            CheckArgument(data);
+            var newTreeNode = new TreeNode<T>(data);
 
-            if (head == null)
+            if (root == null)
             {
-                head = new TreeNode<T>(data);
+                root = newTreeNode;
                 return;
             }
 
-            TreeNode<T> currentTreeNode = head;
+            var currentTreeNode = root;
             TreeNode<T> parent = null;
-            bool isLeftBranch = false;
+            var isLeftBranch = false;
 
             while (currentTreeNode != null)
             {
                 parent = currentTreeNode;
-                isLeftBranch = IsLeftSide(parent.Data, data);
-
-                if (isLeftBranch)
-                {
-                    currentTreeNode = currentTreeNode.Left;
-                }
-                else
-                {
-                    currentTreeNode = currentTreeNode.Right;
-                }
+                isLeftBranch = IsLeftSide(parent, newTreeNode);
+                currentTreeNode = (isLeftBranch) ? currentTreeNode.Left : currentTreeNode.Right;
             }
 
             Count++;
 
             if (isLeftBranch)
             {
-                parent.Left = new TreeNode<T>(data);
+                parent.Left = newTreeNode;
             }
             else
             {
-                parent.Right = new TreeNode<T>(data);
+                parent.Right = newTreeNode;
             }
         }
 
         private TreeNode<T> FindWithParent(T data, out TreeNode<T> parent)
         {
-            CheckArgument(data);
-
-            TreeNode<T> currentTreeNode = head;
+            var currentTreeNode = root;
             parent = null;
 
-            if (head == null)
+            if (root == null)
             {
                 return null;
             }
 
+            IComparable<T> comparable = data as IComparable<T>;
+
+            if (comparer == null & comparable == null)
+            {
+                throw new InvalidOperationException("There is no way to compare elements!");
+            }
+
             while (currentTreeNode != null)
             {
-                if (currentTreeNode.Data.CompareTo(data) < 0)
-                {
-                    parent = currentTreeNode;
-                    currentTreeNode = currentTreeNode.Right;
-                }
-                else if (currentTreeNode.Data.CompareTo(data) > 0)
-                {
-                    parent = currentTreeNode;
-                    currentTreeNode = currentTreeNode.Left;
-                }
-                else
+                var comparisonResult = (comparer != null) ? comparer.Compare(data, currentTreeNode.Data) : comparable.CompareTo(currentTreeNode.Data);
+
+                if (comparisonResult == 0)
                 {
                     return currentTreeNode;
                 }
+
+                parent = currentTreeNode;
+                currentTreeNode = (comparisonResult > 0) ? currentTreeNode.Right : currentTreeNode.Left;
             }
 
             return null;
@@ -85,45 +83,22 @@ namespace Tree
 
         public TreeNode<T> Find(T data)
         {
-            CheckArgument(data);
-
-            if (head == null)
+            if (root == null)
             {
                 return null;
             }
 
-            TreeNode<T> currentTreeNode = head;
-
-            while (currentTreeNode != null)
-            {
-                if (currentTreeNode.Data.CompareTo(data) < 0)
-                {
-                    currentTreeNode = currentTreeNode.Right;
-                }
-                else if (currentTreeNode.Data.CompareTo(data) > 0)
-                {
-                    currentTreeNode = currentTreeNode.Left;
-                }
-                else
-                {
-                    return currentTreeNode;
-                }
-            }
-
-            return null;
+            return FindWithParent(data, out TreeNode<T> parent);
         }
 
         public bool Remove(T data)
         {
-            CheckArgument(data);
-
-            if (head == null)
+            if (root == null)
             {
                 return false;
             }
 
-            TreeNode<T> parent = null;
-            var currentTreeNode = FindWithParent(data, out parent);
+            var currentTreeNode = FindWithParent(data, out TreeNode<T> parent);
 
             if (currentTreeNode == null)
             {
@@ -136,9 +111,9 @@ namespace Tree
             {
                 if (parent == null)
                 {
-                    head = parent;
+                    root = parent;
                 }
-                else if (IsLeftSide(parent.Data, currentTreeNode.Data))
+                else if (IsLeftSide(parent, currentTreeNode))
                 {
                     parent.Left = null;
                 }
@@ -151,9 +126,9 @@ namespace Tree
             {
                 if (parent == null)
                 {
-                    head = currentTreeNode.Right;
+                    root = currentTreeNode.Right;
                 }
-                else if (IsLeftSide(parent.Data, currentTreeNode.Data))
+                else if (IsLeftSide(parent, currentTreeNode))
                 {
                     parent.Left = currentTreeNode.Right;
                 }
@@ -168,7 +143,7 @@ namespace Tree
                 {
                     parent = currentTreeNode.Left;
                 }
-                else if (IsLeftSide(parent.Data, currentTreeNode.Data))
+                else if (IsLeftSide(parent, currentTreeNode))
                 {
                     parent.Left = currentTreeNode.Left;
                 }
@@ -181,9 +156,9 @@ namespace Tree
             {
                 if (parent == null)
                 {
-                    head = GetMinimum(currentTreeNode);
+                    root = GetMinimum(currentTreeNode);
                 }
-                else if (IsLeftSide(parent.Data, currentTreeNode.Data))
+                else if (IsLeftSide(parent, currentTreeNode))
                 {
                     parent.Left = GetMinimum(currentTreeNode);
                 }
@@ -196,15 +171,24 @@ namespace Tree
             return true;
         }
 
-        public void WidthTraversal()
+        public void WidthTraversal(Action<TreeNode<T>> action = null)
         {
+            if (root == null)
+            {
+                return;
+            }
+
             Queue<TreeNode<T>> queue = new Queue<TreeNode<T>>();
-            queue.Enqueue(head);
+            queue.Enqueue(root);
 
             while (queue.Count > 0)
             {
                 var treeNode = queue.Dequeue();
-                Console.WriteLine("{0}, Left:{1}, Right:{2}.", treeNode.Data, treeNode.Left, treeNode.Right);
+
+                if (action != null)
+                {
+                    action(treeNode);
+                }
 
                 if (treeNode.Left != null)
                 {
@@ -218,75 +202,89 @@ namespace Tree
             }
         }
 
-        public void HeightTraversal()
+        public void TraversalInDeep(Action<TreeNode<T>> action = null)
         {
+            if (root == null)
+            {
+                return;
+            }
+
             Stack<TreeNode<T>> stack = new Stack<TreeNode<T>>();
-            stack.Push(head);
+            stack.Push(root);
 
             while (stack.Count > 0)
             {
                 var treeNode = stack.Pop();
-                Console.WriteLine("{0}, Left:{1}, Right:{2}.", treeNode.Data, treeNode.Left, treeNode.Right);
 
-                if (treeNode.Left != null)
+                if (action != null)
                 {
-                    stack.Push(treeNode.Left);
+                    action(treeNode);
                 }
 
                 if (treeNode.Right != null)
                 {
                     stack.Push(treeNode.Right);
                 }
+
+                if (treeNode.Left != null)
+                {
+                    stack.Push(treeNode.Left);
+                }
             }
         }
 
-        public void HeightTraversalRecursive()
+        public void TraversalInDeepRecursive(Action<TreeNode<T>> action = null)
         {
-            if (head == null)
+            if (root == null)
             {
                 return;
             }
 
-            RecursiveTraversal(head);
+            RecursiveTraversal(root, action);
         }
 
-        private void RecursiveTraversal(TreeNode<T> treeNode)
+        private void RecursiveTraversal(TreeNode<T> treeNode, Action<TreeNode<T>> action = null)
         {
-            Console.WriteLine(treeNode.Data);
+            if (action != null)
+            {
+                action(treeNode);
+            }
 
             if (treeNode.Left != null)
             {
-                RecursiveTraversal(treeNode.Left);
+                RecursiveTraversal(treeNode.Left, action);
             }
 
             if (treeNode.Right != null)
             {
-                RecursiveTraversal(treeNode.Right);
+                RecursiveTraversal(treeNode.Right, action);
             }
         }
 
-        private void CheckArgument(T data)
+        private bool IsLeftSide(TreeNode<T> parent, TreeNode<T> child)
         {
-            if (data == null)
+            if (child == null)
             {
-                throw new ArgumentNullException(nameof(data), $"The argument cannot be null!");
-            }
-        }
-
-        private bool IsLeftSide(T parent, T child)
-        {
-            if (parent.CompareTo(child) <= 0)
-            {
-                return false;
+                return true;
             }
 
-            return true;
+            IComparable<T> comparable = parent.Data as IComparable<T>;
+
+            if (comparer == null & comparable == null)
+            {
+                throw new InvalidOperationException("There is no way to compare elements!");
+            }
+
+            var comparisonResult = (comparer != null) ? comparer.Compare(parent.Data, child.Data) : comparable.CompareTo(child.Data);
+
+            return comparisonResult > 0;
         }
 
-        private TreeNode<T> GetMinimum(TreeNode<T> treeNode)
+        private static TreeNode<T> GetMinimum(TreeNode<T> treeNode)
         {
             var parent = treeNode;
             var child = treeNode.Right;
+            var isLeftSide = child.Left != null;
 
             while (child.Left != null)
             {
@@ -294,13 +292,13 @@ namespace Tree
                 child = child.Left;
             }
 
-            if (child.Right == null)
+            if (isLeftSide)
             {
-                parent.Left = null;
+                parent.Left = child.Right;
             }
             else
             {
-                parent.Left = child.Right;
+                parent.Right = child.Right;
             }
 
             child.Left = treeNode.Left;

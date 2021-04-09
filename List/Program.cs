@@ -36,6 +36,8 @@ namespace SinglyLinkedList
 
             list.Insert(list.Count - 1, "33");
             Console.WriteLine(list);
+
+            Console.WriteLine(list.Get(list.Count - 1));
         }
     }
 }

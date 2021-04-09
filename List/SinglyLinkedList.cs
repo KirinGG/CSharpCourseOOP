@@ -22,44 +22,41 @@ namespace SinglyLinkedList
         public T Get(int index)
         {
             CheckIndex(index);
-            ListItem<T> currentItem = GetItemByIndex(index);
 
-            return currentItem.Data;
+            return GetItemByIndex(index).Data;
         }
 
         public T Set(int index, T data)
         {
             CheckIndex(index);
 
-            ListItem<T> currentItem = GetItemByIndex(index);
-            T dataItem = currentItem.Data;
+            var currentItem = GetItemByIndex(index);
+            var oldData = currentItem.Data;
             currentItem.Data = data;
 
-            return dataItem;
+            return oldData;
         }
 
         public T RemoveAt(int index)
         {
             CheckIndex(index);
 
-            T itemData = head.Data;
-
-            Count--;
-
             if (index == 0)
             {
+                var itemData = head.Data;
                 RemoveFirst();
                 return itemData;
             }
 
-            ListItem<T> previousItem = GetItemByIndex(index - 1);
-            ListItem<T> currentItem = previousItem.Next;
+            Count--;
 
-            itemData = currentItem.Data;
+            var previousItem = GetItemByIndex(index - 1);
+            var currentItem = previousItem.Next;
+
             previousItem.Next = currentItem.Next;
             currentItem.Next = null;
 
-            return itemData;
+            return currentItem.Data;
         }
 
         public void AddFirst(T data)
@@ -78,10 +75,18 @@ namespace SinglyLinkedList
                 return;
             }
 
-            ListItem<T> previousItem = GetItemByIndex(index - 1);
-            ListItem<T> currentItem = previousItem.Next;
+            var previousItem = GetItemByIndex(index - 1);
+            var currentItem = previousItem.Next;
 
-            previousItem.Next = new ListItem<T>(data, currentItem);
+            if (index == Count - 1)
+            {
+                currentItem.Next = new ListItem<T>(data, currentItem);
+            }
+            else
+            {
+                previousItem.Next = new ListItem<T>(data, currentItem);
+            }
+
             Count++;
         }
 
@@ -97,15 +102,17 @@ namespace SinglyLinkedList
 
             do
             {
-                if (IsEquals(currentItem.Data, data))
-                {
-                    Count--;
+                var isEquals = (currentItem.Data == null || data == null) ? (currentItem.Data == null && data == null) : (currentItem.Data.Equals(data));
 
+                if (isEquals)
+                {
                     if (currentItem == head)
                     {
                         RemoveFirst();
                         return true;
                     }
+
+                    Count--;
 
                     previousItem.Next = currentItem.Next;
                     currentItem.Next = null;
@@ -127,11 +134,11 @@ namespace SinglyLinkedList
                 throw new InvalidOperationException("The list is empty.");
             }
 
-            T itemData = head.Data;
+            var deletedData = head.Data;
             head = head.Next;
             Count--;
 
-            return itemData;
+            return deletedData;
         }
 
         public void Reverse()
@@ -210,8 +217,6 @@ namespace SinglyLinkedList
 
         private ListItem<T> GetItemByIndex(int index)
         {
-            CheckIndex(index);
-
             ListItem<T> currentItem = head;
 
             for (int i = 0; i < index; i++)
@@ -220,21 +225,6 @@ namespace SinglyLinkedList
             }
 
             return currentItem;
-        }
-
-        private bool IsEquals(T item1, T item2)
-        {
-            if (item1 == null && item2 == null)
-            {
-                return true;
-            }
-
-            if (item1 == null || item2 == null)
-            {
-                return false;
-            }
-
-            return item1.Equals(item2);
         }
     }
 }

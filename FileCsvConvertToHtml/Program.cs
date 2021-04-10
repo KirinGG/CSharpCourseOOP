@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using FileCsvConvertToHtml.Data;
 
 namespace FileCsvConvertToHtml
 {
@@ -14,15 +16,26 @@ namespace FileCsvConvertToHtml
 
             string inputFilePath = args[0];
             string outFilePath = args[1];
-            
-            DataFromFile dataFromFile = new DataFromFile(inputFilePath);
-            DataToFile dataToFile = new DataToFile(outFilePath);
+
+            if (!File.Exists(inputFilePath))
+            {
+                Console.WriteLine($"Входной файл: {inputFilePath} не найден!") ;
+                return;
+            }
+
+            if (!File.Exists(outFilePath))
+            {
+                Console.WriteLine($"Выходной файл: {outFilePath} не найден!");
+                return;
+            }
+
+            using DataFromFile dataFromFile = new DataFromFile(inputFilePath);
+            using DataToFile dataToFile = new DataToFile(outFilePath);
 
             HtmlDocument htmlDocument = new HtmlDocument(dataFromFile, dataToFile);
             htmlDocument.CreateHeader();
             htmlDocument.CreateBody();
             htmlDocument.CreateFooter();
-            htmlDocument.Close();
          }
     }
 }

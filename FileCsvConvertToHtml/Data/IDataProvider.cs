@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FileCsvConvertToHtml
+﻿namespace FileCsvConvertToHtml.Data
 {
     interface IDataProvider
     {
         public string Next();
-
-        public void Close();
     }
 }

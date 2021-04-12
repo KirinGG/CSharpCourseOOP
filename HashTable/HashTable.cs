@@ -2,108 +2,158 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace HashTables
 {
     class HashTable<T> : ICollection<T>
     {
-        private List<T>[] keys;
-        private int capacity;
-        private const int defaultCapacity = 100;
+        private const int DefaultArrayLength = 10;
 
-        public int Capacity
+        private List<T>[] lists;
+        private int modificationsNumber;
+
+        public int ModificationsNumber
         {
             get
             {
-                return capacity;
+                return modificationsNumber;
             }
-            set
-            {
-                if (value <= 0)
-                {
-                    value = defaultCapacity;
-                }
 
-                capacity = value;
+            private set
+            {
+                if (modificationsNumber == int.MaxValue)
+                {
+                    modificationsNumber = 0;
+                }
+                else
+                {
+                    modificationsNumber = value;
+                }
             }
         }
 
         public int Count { get; private set; }
 
-        public bool IsReadOnly { get; private set; }
+        public bool IsReadOnly => false;
 
-        public HashTable()
+        public HashTable(int arrayLength = DefaultArrayLength)
         {
-            Capacity = defaultCapacity;
-            keys = new List<T>[Capacity];
-            IsReadOnly = true;
-        }
+            if (arrayLength < 1)
+            {
+                throw new ArgumentException($"The array length must be greater than 0. Array length: {arrayLength}.", nameof(arrayLength));
+            }
 
-        public HashTable(int capacity)
-        {
-            Capacity = capacity;
-            keys = new List<T>[Capacity];
-            IsReadOnly = true;
+            lists = new List<T>[arrayLength];
         }
 
         public void Add(T item)
         {
-            var key = Math.Abs(item.GetHashCode()) % Capacity;
+            var index = GetIndex(item);
 
-            if (keys[key] == null)
+            if (lists[index] == null)
             {
-                keys[key] = new List<T>();
+                lists[index] = new List<T>();
             }
 
-            keys[key].Add(item);
+            lists[index].Add(item);
             Count++;
+            ModificationsNumber++;
         }
 
         public void Clear()
         {
-            Array.Clear(keys, 0, Count);
+            Array.Clear(lists, 0, lists.Length);
+            ModificationsNumber++;
+            Count = 0;
         }
 
         public bool Contains(T item)
         {
-            var key = Math.Abs(item.GetHashCode()) % Capacity;
+            var index = GetIndex(item);
 
-            return keys[key].Contains(item);
+            if (lists[index] == null)
+            {
+                return false;
+            }
+
+            return lists[index].Contains(item);
         }
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            keys.CopyTo(array, arrayIndex);
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            for (int i = 0; i < Capacity; ++i)
+            if (array == null)
             {
-                if (keys[i] == null)
+                throw new ArgumentNullException(nameof(array));
+            }
+
+            if (arrayIndex < 0 || arrayIndex >= array.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(arrayIndex), $"The index goes beyond the boundary [0, {array.Length}] of the list. Current index value: {arrayIndex}.");
+            }
+
+            if (Count > (array.Length - arrayIndex))
+            {
+                throw new ArgumentException("The number of items in the source collection HashTable more available space from the position specified by the value of the index parameter to the end of the array destination array.");
+            }
+
+            var j = arrayIndex;
+
+            for (var i = 0; i < lists.Length; i++)
+            {
+                if (lists[i] == null)
                 {
                     continue;
                 }
 
-                foreach (T item in keys[i])
+                foreach (var item in lists[i])
                 {
-                    yield return item;
-
+                    array[j] = item;
+                    j++;
                 }
             }
         }
 
         public bool Remove(T item)
         {
-            var key = Math.Abs(item.GetHashCode()) % Capacity;
+            var index = GetIndex(item);
 
-            if (keys[key].Remove(item))
+            if (lists[index] == null)
+            {
+                return false;
+            }
+
+            if (lists[index].Remove(item))
             {
                 Count--;
+                ModificationsNumber++;
                 return true;
             }
 
             return false;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            var currentModificationsNumber = ModificationsNumber;
+
+            foreach (var list in lists)
+            {
+                if (currentModificationsNumber != ModificationsNumber)
+                {
+                    throw new InvalidOperationException("The data has been modified!");
+                }
+
+                if (list == null)
+                {
+                    continue;
+                }
+
+                foreach (T item in list)
+                {
+                    yield return item;
+                }
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -113,7 +163,21 @@ namespace HashTables
 
         public override string ToString()
         {
-            return string.Join(", ", keys.Where(x => x != null).Select(p => string.Join(", ", p)));
+            var items = lists
+                .Select(x => (x == null || x.Count == 0) ? "null" : string.Join(", ", x))
+                .ToArray();
+
+            return new StringBuilder("[").Append(string.Join(", ", items)).Append("]").ToString();
+        }
+
+        private int GetIndex(T item)
+        {
+            if (item == null)
+            {
+                return 0;
+            }
+
+            return Math.Abs(item.GetHashCode()) % lists.Length;
         }
     }
 }

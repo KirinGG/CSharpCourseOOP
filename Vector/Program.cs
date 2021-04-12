@@ -25,7 +25,8 @@ namespace Vectors
             Console.WriteLine($" = {vectors[3].Subtract(vectors[2])}");
 
             double scalar = 3;
-            Console.WriteLine($"{vectors[4]} * {scalar} = {vectors[4].MultiplyByScalar(scalar)}");
+            Console.Write($"{vectors[4]} * {scalar}");
+            Console.WriteLine($" = {vectors[4].MultiplyByScalar(scalar)}");
         }
     }
 }

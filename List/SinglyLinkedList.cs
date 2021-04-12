@@ -3,22 +3,11 @@ using System.Text;
 
 namespace SinglyLinkedList
 {
-    enum ArgumentType
-    {
-        Index,
-        Data
-    }
-
-    class SinglyLinkedList<T>
+    public class SinglyLinkedList<T>
     {
         private ListItem<T> head;
 
         public int Count { get; private set; }
-
-        public SinglyLinkedList()
-        {
-
-        }
 
         public T GetFirst()
         {
@@ -32,64 +21,72 @@ namespace SinglyLinkedList
 
         public T Get(int index)
         {
-            CheckArgument(index, ArgumentType.Index);
-            ListItem<T> currentItem = GetItemByIndex(index);
+            CheckIndex(index);
 
-            return currentItem.Data;
+            return GetItemByIndex(index).Data;
         }
 
         public T Set(int index, T data)
         {
-            CheckArgument(index, ArgumentType.Index);
-            ListItem<T> currentItem = GetItemByIndex(index);
-            T result = currentItem.Data;
+            CheckIndex(index);
+
+            var currentItem = GetItemByIndex(index);
+            var oldData = currentItem.Data;
             currentItem.Data = data;
 
-            return result;
+            return oldData;
         }
 
         public T RemoveAt(int index)
         {
-            CheckArgument(index, ArgumentType.Index);
+            CheckIndex(index);
 
-            ListItem<T> currentItem = head;
-            ListItem<T> previousItem = null;
-
-            for (int i = 1; i < index; i++)
+            if (index == 0)
             {
-                previousItem = currentItem;
-                currentItem = currentItem.Next;
+                var itemData = head.Data;
+                RemoveFirst();
+                return itemData;
             }
+
+            Count--;
+
+            var previousItem = GetItemByIndex(index - 1);
+            var currentItem = previousItem.Next;
 
             previousItem.Next = currentItem.Next;
             currentItem.Next = null;
-            Count--;
 
             return currentItem.Data;
         }
 
         public void AddFirst(T data)
         {
-            CheckArgument(data, ArgumentType.Data);
             head = new ListItem<T>(data, head);
             Count++;
         }
 
         public void Insert(int index, T data)
         {
-            CheckArgument(index, ArgumentType.Index);
-            CheckArgument(data, ArgumentType.Data);
+            CheckIndex(index);
 
-            ListItem<T> currentItem = head;
-            ListItem<T> previousItem = null;
-
-            for (int i = 1; i < index; i++)
+            if (index == 0)
             {
-                previousItem = currentItem;
-                currentItem = currentItem.Next;
+                AddFirst(data);
+                return;
             }
 
-            previousItem.Next = new ListItem<T>(data, currentItem); ;
+            var previousItem = GetItemByIndex(index - 1);
+            var currentItem = previousItem.Next;
+
+            if (index == Count - 1)
+            {
+                currentItem.Next = new ListItem<T>(data, currentItem);
+            }
+            else
+            {
+                previousItem.Next = new ListItem<T>(data, currentItem);
+            }
+
             Count++;
         }
 
@@ -100,32 +97,31 @@ namespace SinglyLinkedList
                 return false;
             }
 
-            CheckArgument(data, ArgumentType.Data);
-
-            ListItem<T> currentItem = head;
             ListItem<T> previousItem = null;
-            ListItem<T> deleteItem = new ListItem<T>(data);
+            ListItem<T> currentItem = head;
 
             do
             {
-                if (currentItem.Data.Equals(deleteItem.Data))
+                var isEquals = (currentItem.Data == null || data == null) ? (currentItem.Data == null && data == null) : (currentItem.Data.Equals(data));
+
+                if (isEquals)
                 {
-                    if (Count == 1)
+                    if (currentItem == head)
                     {
                         RemoveFirst();
                         return true;
                     }
 
+                    Count--;
+
                     previousItem.Next = currentItem.Next;
                     currentItem.Next = null;
 
-                    Count--;
                     return true;
                 }
 
                 previousItem = currentItem;
                 currentItem = currentItem.Next;
-
             } while (currentItem != null);
 
             return false;
@@ -137,12 +133,12 @@ namespace SinglyLinkedList
             {
                 throw new InvalidOperationException("The list is empty.");
             }
-            
-            T result = head.Data;
+
+            var deletedData = head.Data;
             head = head.Next;
             Count--;
 
-            return result;
+            return deletedData;
         }
 
         public void Reverse()
@@ -175,9 +171,9 @@ namespace SinglyLinkedList
 
         public SinglyLinkedList<T> Copy()
         {
-            if(head == null)
+            if (head == null)
             {
-                return null;
+                return new SinglyLinkedList<T>();
             }
 
             SinglyLinkedList<T> singlyLinkedList = new SinglyLinkedList<T>();
@@ -211,33 +207,19 @@ namespace SinglyLinkedList
             return stringBuilder.Append("]").ToString();
         }
 
-        private void CheckArgument(int data, ArgumentType type)
+        private void CheckIndex(int index)
         {
-            if (type == ArgumentType.Index)
+            if (index < 0 || index >= Count)
             {
-                if (data < 0 || data >= Count)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(data), $"The index goes beyond the boundary [0, {Count}] of the list. Current index value: {data}.");
-                }
+                throw new ArgumentOutOfRangeException(nameof(index), $"The index goes beyond the boundary [0, {Count}) of the list. Current index value: {index}.");
             }
         }
 
-        private void CheckArgument(T data, ArgumentType type)
-        {
-            if (type == ArgumentType.Data)
-            {
-                if (data == null)
-                {
-                    throw new ArgumentNullException(nameof(data), $"The argument cannot be null!");
-                }
-            }
-        }
-    
         private ListItem<T> GetItemByIndex(int index)
         {
             ListItem<T> currentItem = head;
 
-            for (int i = 1; i < index; i++)
+            for (int i = 0; i < index; i++)
             {
                 currentItem = currentItem.Next;
             }

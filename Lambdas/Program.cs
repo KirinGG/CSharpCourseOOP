@@ -26,13 +26,18 @@ namespace Lambdas
 
             Console.WriteLine("Введите количество элементов:");
             var elementsCount = Convert.ToInt32(Console.ReadLine());
-            PrintNumbersRoot(elementsCount);
+
+            Console.WriteLine("Корни:");
+            PrintSquareRoots(elementsCount);
+
+            Console.WriteLine("Числа Фибоначчи:");
             PrintFibonacciNumbers(elementsCount);
         }
 
-        public static IEnumerable<double> GetRoot()
+        public static IEnumerable<double> GetSquareRoots()
         {
-            int i = 0;
+            var i = 0;
+
             while (true)
             {
                 yield return Math.Sqrt(i);
@@ -40,31 +45,18 @@ namespace Lambdas
             }
         }
 
-        public static IEnumerable<double> GetFibonacciNumber()
+        public static IEnumerable<double> GetFibonacciNumbers()
         {
-            int fibonacciNumberIndex = 0;
-            int previousFibonacciNumber = 0;
-            int currentFibonacciNumber = 1;
+            var previousFibonacciNumber = 0;
+            var currentFibonacciNumber = 1;
+
+            yield return previousFibonacciNumber;
 
             while (true)
             {
-                if (fibonacciNumberIndex == 0)
-                {
-                    fibonacciNumberIndex++;
-
-                    yield return previousFibonacciNumber;
-                }
-                else if (fibonacciNumberIndex == 1)
-                {
-                    fibonacciNumberIndex++;
-
-                    yield return currentFibonacciNumber;
-                }
-
-                int nextFibonacciNumber = previousFibonacciNumber + currentFibonacciNumber;
+                var nextFibonacciNumber = previousFibonacciNumber + currentFibonacciNumber;
                 previousFibonacciNumber = currentFibonacciNumber;
                 currentFibonacciNumber = nextFibonacciNumber;
-                fibonacciNumberIndex++;
 
                 yield return previousFibonacciNumber;
             }
@@ -73,8 +65,9 @@ namespace Lambdas
         public static void PrintUniqueNames(Person[] persons)
         {
             var uniqueNames = persons
-                .Select(s => s.Name)
-                .Distinct();
+                .Select(p => p.Name)
+                .Distinct()
+                .ToList();
 
             Console.WriteLine($"Уникальные имена: {string.Join(", ", uniqueNames)}.");
         }
@@ -82,61 +75,46 @@ namespace Lambdas
         public static void PrintYoungPersons(Person[] persons)
         {
             var youngPersons = persons
-                .Where(x => x.Age < 18);
+                .Where(p => p.Age < 18)
+                .ToList();
 
-            Console.WriteLine($"Список людей младше 18: {string.Join(", ", youngPersons.Select(s => s.Name))} средний возраст составляет:{youngPersons.Select(s => s.Age).Average()}.");
+            Console.WriteLine($"Список людей младше 18: {string.Join(", ", youngPersons.Select(p => p.Name))} средний возраст составляет: {youngPersons.Average(p => p.Age)}.");
         }
 
         public static void PrintPersonsByAge(Person[] persons)
         {
-            Dictionary<string, double> personsByAge = persons
+            var personsByAge = persons
                  .GroupBy(p => p.Name)
-                 .ToDictionary(p => p.Key, p => p.ToList().Select(x => x.Age).Average());
+                 .ToDictionary(g => g.Key, g => g.Average(p1 => p1.Age));
 
-            foreach (KeyValuePair<string, double> keyValue in personsByAge)
+            foreach (var keyValuePair in personsByAge)
             {
-                Console.WriteLine(keyValue.Key + " - " + keyValue.Value);
+                Console.WriteLine(keyValuePair.Key + " - " + keyValuePair.Value);
             }
         }
 
         public static void PrintMiddleAgedPersons(Person[] persons)
         {
             var middleAgedPersons = persons
-                .Where(s => s.Age >= 20 && s.Age <= 45)
-                .OrderByDescending(s => s.Age);
+                .Where(p => p.Age >= 20 && p.Age <= 45)
+                .OrderByDescending(p => p.Age);
 
-            Console.WriteLine($"Люди, возраст которых от 20 до 45: {string.Join(", ", middleAgedPersons.Select(s => s.Name))}.");
+            Console.WriteLine($"Люди, возраст которых от 20 до 45: {string.Join(", ", middleAgedPersons.Select(p => p.Name))}.");
         }
 
-        public static void PrintNumbersRoot(int elementsCount)
+        public static void PrintSquareRoots(int elementsCount)
         {
-            int i = 0;
-
-            foreach (double element in GetRoot())
+            foreach (var element in GetSquareRoots().Take(elementsCount))
             {
-                if (i == elementsCount)
-                {
-                    break;
-                }
-
                 Console.WriteLine(element);
-                i++;
             }
         }
 
         public static void PrintFibonacciNumbers(int elementsCount)
         {
-            int i = 0;
-
-            foreach (double element in GetFibonacciNumber())
+            foreach (var element in GetFibonacciNumbers().Take(elementsCount))
             {
-                if (i == elementsCount)
-                {
-                    break;
-                }
-
                 Console.WriteLine(element);
-                i++;
             }
         }
     }

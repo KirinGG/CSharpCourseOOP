@@ -1,25 +1,15 @@
 ﻿using System;
 using System.IO;
 
-namespace FileCsvConvertToHtml
+namespace FileCsvConvertToHtml.Data
 {
-    class DataToFile : IDataReceiver
+    class DataToFile : IDataReceiver, IDisposable
     {
-        private string outFilePath;
-        StreamWriter writer;
+        private StreamWriter writer;
 
         public DataToFile(string outFilePath)
         {
-            this.outFilePath = outFilePath;
-
-            try
-            {
-                writer = new StreamWriter(outFilePath);
-            }
-            catch (FileNotFoundException e)
-            {
-                Console.WriteLine(e);
-            }
+            writer = new StreamWriter(outFilePath);
         }
 
         public void Append(string data)
@@ -27,9 +17,9 @@ namespace FileCsvConvertToHtml
             writer.Write(data);
         }
 
-        public void Close()
+        public void Dispose()
         {
-            writer.Close();
+            writer.Dispose();
         }
     }
 }

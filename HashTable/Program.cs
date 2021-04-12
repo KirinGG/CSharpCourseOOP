@@ -10,19 +10,19 @@ namespace HashTables
             hashTable.Add("1");
             hashTable.Add("101");
             hashTable.Add("5");
+            hashTable.Add("1");
+            hashTable.Add(null);
+            Console.WriteLine(hashTable);
 
-           /* foreach (string e in hashTable)
-            {
-                Console.WriteLine(e);
-            }
+            hashTable.Remove("7");
+            hashTable.Remove(null);
+            Console.WriteLine(hashTable);
 
-            hashTable.Remove("101");
+            string[] array = new string[hashTable.Count + 2];
+            hashTable.CopyTo(array, 2);
+            Console.WriteLine(string.Join(", ", array));
 
-            foreach (string e in hashTable)
-            {
-                Console.WriteLine(e);
-            }*/
-
+            hashTable.Clear();
             Console.WriteLine(hashTable);
         }
     }

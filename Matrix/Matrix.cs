@@ -11,12 +11,12 @@ namespace Matrixes
         {
             if (rowsCount < 1)
             {
-                throw new ArgumentException("The number of rows must be greater than zero!", nameof(rowsCount));
+                throw new ArgumentException($"The number of rows must be greater than zero! rowsCount: {rowsCount}.", nameof(rowsCount));
             }
 
             if (columnsCount < 1)
             {
-                throw new ArgumentException("The number of columns must be greater than zero!", nameof(columnsCount));
+                throw new ArgumentException($"The number of columns must be greater than zero! columnsCount: {columnsCount}.", nameof(columnsCount));
             }
 
             rows = new Vector[rowsCount];
@@ -31,7 +31,7 @@ namespace Matrixes
         {
             if (matrix == null)
             {
-                throw new ArgumentException("The matrix cannot be empty!", nameof(matrix));
+                throw new ArgumentNullException(nameof(matrix), "The matrix cannot be empty!");
             }
 
             rows = new Vector[matrix.rows.Length];
@@ -44,9 +44,14 @@ namespace Matrixes
 
         public Matrix(double[,] components)
         {
-            if (components == null || components.GetLength(0) == 0 || components.GetLength(1) == 0)
+            if (components.GetLength(0) == 0 || components.GetLength(1) == 0)
             {
                 throw new ArgumentException("The array cannot be empty!", nameof(components));
+            }
+
+            if (components == null)
+            {
+                throw new ArgumentNullException(nameof(components), "The array cannot be null!");
             }
 
             rows = new Vector[components.GetLength(0)];
@@ -66,9 +71,14 @@ namespace Matrixes
 
         public Matrix(Vector[] vectors)
         {
-            if (vectors == null || vectors.Length == 0)
+            if (vectors.Length == 0)
             {
                 throw new ArgumentException("The vector cannot be empty!", nameof(vectors));
+            }
+
+            if (vectors == null)
+            {
+                throw new ArgumentNullException(nameof(vectors), "The vector cannot be null!");
             }
 
             var maxColumnsCount = GetMaxSize(vectors);
@@ -76,14 +86,14 @@ namespace Matrixes
 
             for (int i = 0; i < rows.Length; i++)
             {
-                double[] row = new double[vectors[i].GetSize()];
+                double[] row = new double[maxColumnsCount];
 
                 for (int j = 0; j < vectors[i].GetSize(); j++)
                 {
                     row[j] = vectors[i].GetComponent(j);
                 }
 
-                rows[i] = new Vector(maxColumnsCount, row);
+                rows[i] = new Vector(row);
             }
         }
 
@@ -115,7 +125,7 @@ namespace Matrixes
 
             if (vector.GetSize() != rows[0].GetSize())
             {
-                throw new ArgumentException(nameof(vector), $"invalid vector size. Vector size: {vector.GetSize()}, number of matrix columns: {rows[0].GetSize()}");
+                throw new ArgumentException($"invalid vector size. Vector size: {vector.GetSize()}, number of matrix columns: {rows[0].GetSize()}", nameof(vector));
             }
 
             rows[rowIndex] = new Vector(vector);
@@ -151,9 +161,9 @@ namespace Matrixes
 
         public Matrix MultiplyByScalar(double scalar)
         {
-            for (int i = 0; i < rows.Length; i++)
+            foreach (var row in rows)
             {
-                rows[i].MultiplyByScalar(scalar);
+                row.MultiplyByScalar(scalar);
             }
 
             return this;
@@ -226,12 +236,17 @@ namespace Matrixes
 
         public Vector MultiplyByVector(Vector vector)
         {
+            if (vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector), "The vector cannot be null!");
+            }
+
             if (rows[0].GetSize() != vector.GetSize())
             {
                 throw new ArgumentException($"The number of columns of the matrix must be equal to the number of elements of the vector! Matrix columns:{rows[0].GetSize()}, vector length:{vector.GetSize()}", nameof(vector));
             }
 
-            double[] array = new double[vector.GetSize()];
+            double[] array = new double[rows.Length];
 
             for (int i = 0; i < rows.Length; i++)
             {
@@ -247,7 +262,7 @@ namespace Matrixes
 
             for (int i = 0; i < rows.Length; i++)
             {
-                rows[i].Add(matrix.GetRow(i));
+                rows[i].Add(matrix.rows[i]);
             }
 
             return this;
@@ -259,7 +274,7 @@ namespace Matrixes
 
             for (int i = 0; i < rows.Length; i++)
             {
-                rows[i].Subtract(matrix.GetRow(i));
+                rows[i].Subtract(matrix.rows[i]);
             }
 
             return this;
@@ -269,26 +284,26 @@ namespace Matrixes
         {
             CheckSize(matrix1, matrix2);
 
-            return matrix1.Add(matrix2);
+            return new Matrix(matrix1).Add(matrix2);
         }
 
         public static Matrix GetDifference(Matrix matrix1, Matrix matrix2)
         {
             CheckSize(matrix1, matrix2);
 
-            return matrix1.Subtract(matrix2);
+            return new Matrix(matrix1).Subtract(matrix2);
         }
 
         public static Matrix GetProduct(Matrix matrix1, Matrix matrix2)
         {
-            if(matrix1 == null || matrix2 == null)
+            if (matrix1 == null || matrix2 == null)
             {
-                throw new InvalidOperationException("!he matrix cannot be null");
+                throw new InvalidOperationException("The matrixes cannot be null!");
             }
 
-            if (matrix1.rows.Length != matrix2.rows[0].GetSize())
+            if (matrix1.rows[0].GetSize() != matrix2.rows.Length)
             {
-                throw new ArgumentException($"The number of rows in the 1st matrix must be equal to the number of columns in the second matrix! Matix1 rows: {matrix1.rows.Length}, matrix2 columns:{matrix2.rows[0].GetSize()}");
+                throw new ArgumentException($"The number of columns in the 1st matrix must be equal to the number of rows in the second matrix! Matix1 columns: {matrix1.rows[0].GetSize()}, matrix2 rows: {matrix2.rows.Length}");
             }
 
             double[,] components = new double[matrix1.rows.Length, matrix2.rows[0].GetSize()];
@@ -321,7 +336,7 @@ namespace Matrixes
         {
             if (index < 0 || index >= border)
             {
-                throw new ArgumentOutOfRangeException(name, $"The index goes beyond the boundary[0, {border}] of the vector. Current index value - {index}.");
+                throw new ArgumentOutOfRangeException(name, $"The index goes beyond the boundary (0, {border}] of the vector. Current index value - {index}.");
             }
         }
     }

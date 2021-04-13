@@ -119,6 +119,11 @@ namespace Matrixes
                 throw new ArgumentOutOfRangeException(nameof(dimension), $"The value of the dimension parameter must be in the range from 0 to 1! Dimension: {dimension}");
             }
 
+            if (rows == null)
+            {
+                throw new InvalidOperationException("The matrixes cannot be null!");
+            }
+
             if (dimension == 0)
             {
                 return rows.Length;

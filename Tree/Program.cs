@@ -6,9 +6,9 @@ namespace Tree
     {
         static void Main(string[] args)
         {
-            Action<TreeNode<int>> print = delegate (TreeNode<int> treeNode)
+            Action<int> print = delegate (int data)
             {
-                Console.WriteLine("{0}, Left:{1}, Right:{2}.", treeNode.Data, treeNode.Left, treeNode.Right);
+                Console.WriteLine(data);
             };
 
             Console.WriteLine("Test 1:");

@@ -6,7 +6,7 @@ namespace Tree
     class BinaryTree<T>
     {
         private TreeNode<T> root;
-        private IComparer<T> comparer;
+        private readonly IComparer<T> comparer;
 
         public BinaryTree(IComparer<T> comparer = null)
         {
@@ -33,7 +33,7 @@ namespace Tree
             {
                 parent = currentTreeNode;
                 isLeftBranch = IsLeftSide(parent, newTreeNode);
-                currentTreeNode = (isLeftBranch) ? currentTreeNode.Left : currentTreeNode.Right;
+                currentTreeNode = isLeftBranch ? currentTreeNode.Left : currentTreeNode.Right;
             }
 
             Count++;
@@ -58,16 +58,9 @@ namespace Tree
                 return null;
             }
 
-            IComparable<T> comparable = data as IComparable<T>;
-
-            if (comparer == null & comparable == null)
-            {
-                throw new InvalidOperationException("There is no way to compare elements!");
-            }
-
             while (currentTreeNode != null)
             {
-                var comparisonResult = (comparer != null) ? comparer.Compare(data, currentTreeNode.Data) : comparable.CompareTo(currentTreeNode.Data);
+                var comparisonResult = GetComparisonResult(data, currentTreeNode.Data, comparer);
 
                 if (comparisonResult == 0)
                 {
@@ -141,7 +134,7 @@ namespace Tree
             {
                 if (parent == null)
                 {
-                    parent = currentTreeNode.Left;
+                    root = currentTreeNode.Left;
                 }
                 else if (IsLeftSide(parent, currentTreeNode))
                 {
@@ -171,9 +164,9 @@ namespace Tree
             return true;
         }
 
-        public void WidthTraversal(Action<TreeNode<T>> action = null)
+        public void WidthTraversal(Action<T> action)
         {
-            if (root == null)
+            if (root == null || action == null)
             {
                 return;
             }
@@ -184,11 +177,7 @@ namespace Tree
             while (queue.Count > 0)
             {
                 var treeNode = queue.Dequeue();
-
-                if (action != null)
-                {
-                    action(treeNode);
-                }
+                action(treeNode.Data);
 
                 if (treeNode.Left != null)
                 {
@@ -202,9 +191,9 @@ namespace Tree
             }
         }
 
-        public void TraversalInDeep(Action<TreeNode<T>> action = null)
+        public void TraversalInDeep(Action<T> action)
         {
-            if (root == null)
+            if (root == null || action == null)
             {
                 return;
             }
@@ -215,11 +204,7 @@ namespace Tree
             while (stack.Count > 0)
             {
                 var treeNode = stack.Pop();
-
-                if (action != null)
-                {
-                    action(treeNode);
-                }
+                action(treeNode.Data);
 
                 if (treeNode.Right != null)
                 {
@@ -233,9 +218,9 @@ namespace Tree
             }
         }
 
-        public void TraversalInDeepRecursive(Action<TreeNode<T>> action = null)
+        public void TraversalInDeepRecursive(Action<T> action)
         {
-            if (root == null)
+            if (root == null || action == null)
             {
                 return;
             }
@@ -243,12 +228,9 @@ namespace Tree
             RecursiveTraversal(root, action);
         }
 
-        private void RecursiveTraversal(TreeNode<T> treeNode, Action<TreeNode<T>> action = null)
+        private static void RecursiveTraversal(TreeNode<T> treeNode, Action<T> action)
         {
-            if (action != null)
-            {
-                action(treeNode);
-            }
+            action(treeNode.Data);
 
             if (treeNode.Left != null)
             {
@@ -268,14 +250,7 @@ namespace Tree
                 return true;
             }
 
-            IComparable<T> comparable = parent.Data as IComparable<T>;
-
-            if (comparer == null & comparable == null)
-            {
-                throw new InvalidOperationException("There is no way to compare elements!");
-            }
-
-            var comparisonResult = (comparer != null) ? comparer.Compare(parent.Data, child.Data) : comparable.CompareTo(child.Data);
+            var comparisonResult = GetComparisonResult(parent.Data, child.Data, comparer);
 
             return comparisonResult > 0;
         }
@@ -305,6 +280,33 @@ namespace Tree
             child.Right = treeNode.Right;
 
             return child;
+        }
+
+        private static int GetComparisonResult(T data1, T data2, IComparer<T> comparer)
+        {
+            if (comparer != null)
+            {
+                return comparer.Compare(data1, data2);
+            }
+
+            if (data1 == null && data2 == null)
+            {
+                return 0;
+            }
+
+            if (data1 == null || data2 == null)
+            {
+                return (data1 == null) ? -1 : 1;
+            }
+
+            IComparable<T> comparable = data1 as IComparable<T>;
+
+            if (comparable == null)
+            {
+                throw new InvalidOperationException("There is no way to compare elements!");
+            }
+
+            return comparable.CompareTo(data2);
         }
     }
 }

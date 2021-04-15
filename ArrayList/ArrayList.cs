@@ -11,27 +11,7 @@ namespace ArrayList
         private const int DefaultCapacity = 8;
 
         private T[] items;
-        private int modificationsNumber;
-
-        public int ModificationsNumber
-        {
-            get
-            {
-                return modificationsNumber;
-            }
-
-            private set
-            {
-                if (modificationsNumber == int.MaxValue)
-                {
-                    modificationsNumber = 0;
-                }
-                else
-                {
-                    modificationsNumber = value;
-                }
-            }
-        }
+        private int modificationsCount;
 
         public int Capacity
         {
@@ -71,11 +51,7 @@ namespace ArrayList
 
         public bool IsReadOnly => false;
 
-        public ArrayList()
-        {
-            items = new T[DefaultCapacity];
-            Capacity = DefaultCapacity;
-        }
+        public ArrayList() : this(DefaultCapacity) { }
 
         public ArrayList(int capacity)
         {
@@ -85,7 +61,6 @@ namespace ArrayList
             }
 
             items = new T[capacity];
-            Capacity = capacity;
         }
 
         public void Add(T item)
@@ -93,7 +68,6 @@ namespace ArrayList
             if (Count == Capacity)
             {
                 Capacity = (Capacity == 0) ? DefaultCapacity : Capacity * 2;
-                Array.Resize(ref items, Capacity);
             }
 
             Insert(Count, item);
@@ -101,26 +75,19 @@ namespace ArrayList
 
         public void Clear()
         {
-            if (items == null)
-            {
-                throw new InvalidOperationException("Arraylist is empty!");
-            }
-
             Array.Clear(items, 0, Count);
             Count = 0;
+            modificationsCount++;
         }
 
         public bool Contains(T item)
         {
-            for (int i = 0; i < Count; i++)
+            if (IndexOf(item) == -1)
             {
-                if (items[i].Equals(item))
-                {
-                    return true;
-                }
+                return false;
             }
 
-            return false;
+            return true;
         }
 
         public void CopyTo(T[] array, int arrayIndex)
@@ -132,7 +99,30 @@ namespace ArrayList
 
             if (arrayIndex < 0 || arrayIndex >= array.Length)
             {
-                throw new ArgumentOutOfRangeException(nameof(arrayIndex), $"The index goes beyond the boundary [0, {array.Length}] of the list. Current index value: {arrayIndex}.");
+                throw new ArgumentOutOfRangeException(nameof(arrayIndex), $"The index goes beyond the boundary [0, {array.Length}) of the list. Current index value: {arrayIndex}.");
+            }
+
+            if(array.Rank > 1)
+            {
+                throw new ArgumentException("The array is multidimensional!", nameof(array));
+            }
+
+            if(!(items is T[]))
+            {
+                throw new ArrayTypeMismatchException("The source array type cannot be automatically converted to the destination array type!");
+            }
+
+            if (items.Rank > 1)
+            {
+                throw new RankException("The source array is multidimensional!");
+            }
+
+            foreach(var item in items)
+            {
+                if(!(item is T))
+                {
+                    throw new InvalidCastException("At least one element in the source array cannot be cast to the destination array type!");
+                }
             }
 
             Array.Copy(items, 0, array, arrayIndex, Count);
@@ -140,11 +130,11 @@ namespace ArrayList
 
         public IEnumerator<T> GetEnumerator()
         {
-            var currentModificationsNumber = ModificationsNumber;
+            var currentModificationsNumber = modificationsCount;
 
             for (int i = 0; i < Count; i++)
             {
-                if (currentModificationsNumber != ModificationsNumber)
+                if (currentModificationsNumber != modificationsCount)
                 {
                     throw new InvalidOperationException("The data has been modified!");
                 }
@@ -160,28 +150,44 @@ namespace ArrayList
 
         public int IndexOf(T item)
         {
-            if (items == null)
+            for (int i = 0; i < Count; i++)
             {
-                throw new InvalidOperationException("Arraylist is empty!");
+                if (items[i] == null && item == null)
+                {
+                    return i;
+                }
+
+                if (items[i] == null || item == null)
+                {
+                    continue;
+                }
+
+                if (items[i].Equals(item))
+                {
+                    return i;
+                }
             }
 
-            return Array.IndexOf(items, item);
+            return -1;
         }
 
         public void Insert(int index, T item)
         {
-            CheckIndex(index);
+            if (index < 0 || index > Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index), $"The index goes beyond the boundary [0, {Count}] of the list. Current index value: {index}.");
+            }
 
             if (Count == Capacity)
             {
                 Capacity = (Capacity == 0) ? DefaultCapacity : Capacity * 2;
-                Array.Resize(ref items, Capacity);
             }
 
             Array.Copy(items, index, items, index + 1, Count - index);
 
             items[index] = item;
             Count++;
+            modificationsCount++;
         }
 
         public bool Remove(T item)
@@ -200,38 +206,37 @@ namespace ArrayList
 
         public void RemoveAt(int index)
         {
-            if (items == null)
-            {
-                throw new InvalidOperationException("Arraylist is empty!");
-            }
-
             CheckIndex(index);
 
+            Array.Copy(items, index + 1, items, index, Count - index);
             Count--;
-            Array.Copy(items, index + 1, items, index, Count - (index - 1));
-            Array.Clear(items, Count, Capacity - Count);
+            Array.Clear(items, Count, 1);
+            modificationsCount++;
         }
 
-        public void trimToSize()
+        public void TrimExpress()
         {
-            if (items == null || items.Length == Count)
+            if (100 - Count / items.Length * 100 > 10)
             {
-                return;
+                Capacity = Count;
             }
-
-            Array.Resize(ref items, Count);
         }
 
         public override string ToString()
         {
-            return new StringBuilder("[").AppendJoin(", ", items.Take(Count).Select(i => (i == null) ? "null" : i.ToString())).Append("]").ToString();
+            return new StringBuilder("[")
+                       .AppendJoin(", ", items
+                                         .Take(Count)
+                                         .Select(e => (e == null) ? "null" : e.ToString()))
+                       .Append("]")
+                       .ToString();
         }
 
         private void CheckIndex(int index)
         {
-            if (index < 0 || index > Count)
+            if (index < 0 || index >= Count)
             {
-                throw new ArgumentOutOfRangeException(nameof(index), $"The index goes beyond the boundary (0, {Count}] of the list. Current index value: {index}.");
+                throw new ArgumentOutOfRangeException(nameof(index), $"The index goes beyond the boundary [0, {Count}) of the list. Current index value: {index}.");
             }
         }
     }

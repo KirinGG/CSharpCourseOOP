@@ -37,7 +37,7 @@ namespace ArrayList
 
             Console.WriteLine("--- trimToSize ---");
             Console.WriteLine(arrayList.Capacity);
-            arrayList.trimToSize();
+            arrayList.TrimExpress();
             Console.WriteLine(arrayList);
             Console.WriteLine(arrayList.Capacity);
 

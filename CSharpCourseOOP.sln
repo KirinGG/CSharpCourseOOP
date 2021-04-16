@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Graphs", "Graphs\Graphs.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temperature", "TemperatureMVC\Temperature.csproj", "{20501050-D797-4670-AC9C-6DEC73C33EA5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinesweeperUI", "MinesweeperUI\MinesweeperUI.csproj", "{D4A195ED-09CB-4F35-8586-4FD795F180EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{20501050-D797-4670-AC9C-6DEC73C33EA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20501050-D797-4670-AC9C-6DEC73C33EA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20501050-D797-4670-AC9C-6DEC73C33EA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4A195ED-09CB-4F35-8586-4FD795F180EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4A195ED-09CB-4F35-8586-4FD795F180EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4A195ED-09CB-4F35-8586-4FD795F180EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4A195ED-09CB-4F35-8586-4FD795F180EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

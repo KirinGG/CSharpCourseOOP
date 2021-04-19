@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace MinesweeperUI
 {
-    public partial class Form1 : Form
+    public partial class ViewSetting : Form
     {
-        public Form1()
+        public ViewSetting()
         {
             InitializeComponent();
         }

@@ -26,7 +26,7 @@ namespace FileCsvConvertToHtml
             using StreamWriter writer = new StreamWriter(outFilePath);
 
             Converter converter = new Converter(reader, writer);
-            converter.ConvertCSVToHTML();          
+            converter.ConvertCsvToHtml();          
          }
     }
 }

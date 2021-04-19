@@ -34,7 +34,10 @@ namespace SinglyLinkedList
             list.Remove(null);
             Console.WriteLine(list);
 
-            list.Insert(list.Count - 1, "33");
+            list.Insert(4, "33");
+            Console.WriteLine(list);
+
+            list.Insert(list.Count, "75");
             Console.WriteLine(list);
 
             Console.WriteLine(list.Get(list.Count - 1));

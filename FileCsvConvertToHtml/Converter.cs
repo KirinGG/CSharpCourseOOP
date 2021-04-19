@@ -21,7 +21,7 @@ namespace FileCsvConvertToHtml
             return this;
         }
 
-        public void ConvertCSVToHTML()
+        public void ConvertCsvToHtml()
         {
             CreateHeader();
             CreateBody();

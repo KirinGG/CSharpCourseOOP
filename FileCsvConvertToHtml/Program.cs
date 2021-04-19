@@ -3,7 +3,7 @@ using System.IO;
 
 namespace FileCsvConvertToHtml
 {
-    class FileCsvConvertToHtml
+    class Program
     {
         static void Main(string[] args)
         {

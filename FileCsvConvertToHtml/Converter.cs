@@ -1,24 +1,31 @@
 ﻿using System;
-using FileCsvConvertToHtml.Data;
+using System.IO;
 
 namespace FileCsvConvertToHtml
 {
-    class HtmlDocument
+    class Converter
     {
-        private IDataProvider dataProvider;
-        private IDataReceiver dataReceiver;
+        private StreamReader reader;
+        private StreamWriter writer;
 
-        public HtmlDocument(IDataProvider dataProvider, IDataReceiver dataReceiver)
+        public Converter(StreamReader reader, StreamWriter writer)
         {
-            this.dataProvider = dataProvider;
-            this.dataReceiver = dataReceiver;
+            this.reader = reader;
+            this.writer = writer;
         }
 
-        public HtmlDocument CreateHeader()
+        private Converter CreateHeader()
         {
-            dataReceiver.Append(GetHeader());
+            writer.Write(GetHeader());
 
             return this;
+        }
+
+        public void ConvertCSVToHTML()
+        {
+            CreateHeader();
+            CreateBody();
+            CreateFooter();
         }
 
         private static string GetHeader()
@@ -34,13 +41,13 @@ namespace FileCsvConvertToHtml
                 "<table>");
         }
 
-        public HtmlDocument CreateBody()
+        private Converter CreateBody()
         {
             string currentLine;
             int quotesCount = 0;
             char previousCharacter = ' ';
 
-            while ((currentLine = dataProvider.Next()) != null)
+            while ((currentLine = reader.ReadLine()) != null)
             {
                 for (int i = 0; i < currentLine.Length; i++)
                 {
@@ -53,24 +60,24 @@ namespace FileCsvConvertToHtml
                     {
                         if (i == 0)
                         {
-                            dataReceiver.Append(GetHtmlTagTableRow(true));
+                            writer.Write(GetHtmlTagTableRow(true));
                         }
 
-                        dataReceiver.Append(GetHtmlTagTableDetail(i, currentLine, quotesCount));
+                        writer.Write(GetHtmlTagTableDetail(i, currentLine, quotesCount));
 
                         if (i == currentLine.Length - 1)
                         {
-                            dataReceiver.Append(GetHtmlTagTableRow(false));
+                            writer.Write(GetHtmlTagTableRow(false));
                         }
                     }
                     else if (currentLine[i] == '"' && i == 0)
                     {
-                        dataReceiver.Append(GetHtmlTagTableRow(true));
-                        dataReceiver.Append(GetHtmlTagTableDetail(i, currentLine, quotesCount));
+                        writer.Write(GetHtmlTagTableRow(true));
+                        writer.Write(GetHtmlTagTableDetail(i, currentLine, quotesCount));
                     }
                     else if (i == (currentLine.Length - 1) && (quotesCount % 2 != 0))
                     {
-                        dataReceiver.Append(GetHtmlTagBreakRow());
+                        writer.Write(GetHtmlTagBreakRow());
                     }
                     else
                     {
@@ -78,7 +85,7 @@ namespace FileCsvConvertToHtml
 
                         if (currentLine[i] != '"' || isPrintableQuotation)
                         {
-                            dataReceiver.Append(ReplaceSpecialCharacters(currentLine[i]));
+                            writer.Write(ReplaceSpecialCharacters(currentLine[i]));
                         }
                     }
 
@@ -89,9 +96,9 @@ namespace FileCsvConvertToHtml
             return this;
         }
 
-        public HtmlDocument CreateFooter()
+        private Converter CreateFooter()
         {
-            dataReceiver.Append(GetFooter());
+            writer.WriteLine(GetFooter());
 
             return this;
         }
@@ -131,9 +138,14 @@ namespace FileCsvConvertToHtml
         {
             if (i == 0)
             {
-                if (currentLine[i] == ',' || currentLine[i] == '"')
+                if (currentLine[i] == ',')
                 {
                     return "<td></td><td>";
+                }
+
+                if (currentLine[i] == '"')
+                {
+                    return "<td>";
                 }
 
                 return $"<td>{ReplaceSpecialCharacters(currentLine[i])}";
@@ -141,9 +153,14 @@ namespace FileCsvConvertToHtml
 
             if (i == currentLine.Length - 1)
             {
-                if (currentLine[i] == ',' || currentLine[i] == '"')
+                if (currentLine[i] == ',')
                 {
                     return "</td><td></td>";
+                }
+
+                if (currentLine[i] == '"')
+                {
+                    return "<td>";
                 }
 
                 return $"{ReplaceSpecialCharacters(currentLine[i])}</td>";

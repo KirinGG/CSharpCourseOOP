@@ -10,7 +10,7 @@ namespace HashTables
     {
         private const int DefaultArrayLength = 10;
 
-        private List<T>[] lists;
+        private readonly List<T>[] lists;
         private int modificationsCount;
 
         public int Count { get; private set; }
@@ -19,7 +19,6 @@ namespace HashTables
 
         public HashTable() : this(DefaultArrayLength)
         {
-
         }
 
         public HashTable(int arrayLength)
@@ -57,7 +56,7 @@ namespace HashTables
         {
             var index = GetIndex(item);
 
-            return (lists[index] == null) ? false : lists[index].Contains(item);
+            return lists[index] != null && lists[index].Contains(item);
         }
 
         public void CopyTo(T[] array, int arrayIndex)
@@ -77,20 +76,12 @@ namespace HashTables
                 throw new ArgumentException("The number of items in the source collection HashTable more available space from the position specified by the value of the index parameter to the end of the array destination array.");
             }
 
-            var j = arrayIndex;
+            var i = arrayIndex;
 
-            foreach (var list in lists)
+            foreach (var item in this)
             {
-                if (list == null)
-                {
-                    continue;
-                }
-
-                foreach (var item in list)
-                {
-                    array[j] = item;
-                    j++;
-                }
+                array[i] = item;
+                i++;
             }
         }
 
@@ -115,7 +106,7 @@ namespace HashTables
 
         public IEnumerator<T> GetEnumerator()
         {
-            var currentModificationsNumber = modificationsCount;
+            var currentModificationsCount = modificationsCount;
 
             foreach (var list in lists)
             {
@@ -126,7 +117,7 @@ namespace HashTables
 
                 foreach (var item in list)
                 {
-                    if (currentModificationsNumber != modificationsCount)
+                    if (currentModificationsCount != modificationsCount)
                     {
                         throw new InvalidOperationException("The data has been modified!");
                     }
@@ -144,7 +135,8 @@ namespace HashTables
         public override string ToString()
         {
             var items = lists
-                .Select(x => (x == null) ? "null" : string.Join(", ", x))
+                .Where(x => x != null)
+                .Select(x => string.Join(", ", x.Select(y => (y == null) ? "null" : y.ToString())))
                 .ToArray();
 
             return new StringBuilder("[").Append(string.Join(", ", items)).Append("]").ToString();

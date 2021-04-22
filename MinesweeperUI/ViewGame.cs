@@ -16,5 +16,11 @@ namespace MinesweeperUI
         {
             InitializeComponent();
         }
+
+        private void settingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ViewSetting viewSetting = new ViewSetting();
+            viewSetting.Show();
+        }
     }
 }

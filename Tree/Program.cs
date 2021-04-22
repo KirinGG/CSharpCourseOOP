@@ -6,14 +6,11 @@ namespace Tree
     {
         static void Main(string[] args)
         {
-            Action<int> print = delegate (int data)
-            {
-                Console.WriteLine(data);
-            };
+            Action<int> print = Console.WriteLine;
 
             Console.WriteLine("Test 1:");
-            IntComparer comparer = new IntComparer();
-            BinaryTree<int> binaryTree = new BinaryTree<int>(comparer);
+            var comparer = new IntComparer();
+            var binaryTree = new BinaryTree<int>(comparer);
             binaryTree.Add(9);
             binaryTree.Add(6);
             binaryTree.Add(12);
@@ -41,7 +38,7 @@ namespace Tree
             binaryTree.TraversalInDeep(print);
 
             Console.WriteLine("Test 2:");
-            BinaryTree<int> binaryTree1 = new BinaryTree<int>();
+            var binaryTree1 = new BinaryTree<int>();
             binaryTree1.Add(1);
             binaryTree1.Add(3);
             binaryTree1.Add(2);

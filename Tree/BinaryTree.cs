@@ -8,7 +8,11 @@ namespace Tree
         private TreeNode<T> root;
         private readonly IComparer<T> comparer;
 
-        public BinaryTree(IComparer<T> comparer = null)
+        public BinaryTree() : this(null)
+        {
+        }
+
+        public BinaryTree(IComparer<T> comparer)
         {
             this.comparer = comparer;
         }
@@ -60,7 +64,7 @@ namespace Tree
 
             while (currentTreeNode != null)
             {
-                var comparisonResult = GetComparisonResult(data, currentTreeNode.Data, comparer);
+                var comparisonResult = Compare(data, currentTreeNode.Data);
 
                 if (comparisonResult == 0)
                 {
@@ -74,14 +78,14 @@ namespace Tree
             return null;
         }
 
-        public TreeNode<T> Find(T data)
+        public bool Contains(T data)
         {
             if (root == null)
             {
-                return null;
+                return false;
             }
 
-            return FindWithParent(data, out TreeNode<T> parent);
+            return (FindWithParent(data, out var parent) == null) ? false : true;
         }
 
         public bool Remove(T data)
@@ -91,7 +95,7 @@ namespace Tree
                 return false;
             }
 
-            var currentTreeNode = FindWithParent(data, out TreeNode<T> parent);
+            var currentTreeNode = FindWithParent(data, out var parent);
 
             if (currentTreeNode == null)
             {
@@ -166,9 +170,14 @@ namespace Tree
 
         public void WidthTraversal(Action<T> action)
         {
-            if (root == null || action == null)
+            if (root == null)
             {
                 return;
+            }
+
+            if (action == null)
+            {
+                throw new InvalidOperationException("No action set for the crawling collection!");
             }
 
             Queue<TreeNode<T>> queue = new Queue<TreeNode<T>>();
@@ -193,9 +202,14 @@ namespace Tree
 
         public void TraversalInDeep(Action<T> action)
         {
-            if (root == null || action == null)
+            if (root == null)
             {
                 return;
+            }
+
+            if (action == null)
+            {
+                throw new InvalidOperationException("No action set for the crawling collection!");
             }
 
             Stack<TreeNode<T>> stack = new Stack<TreeNode<T>>();
@@ -220,9 +234,14 @@ namespace Tree
 
         public void TraversalInDeepRecursive(Action<T> action)
         {
-            if (root == null || action == null)
+            if (root == null)
             {
                 return;
+            }
+
+            if (action == null)
+            {
+                throw new InvalidOperationException("No action set for the crawling collection!");
             }
 
             RecursiveTraversal(root, action);
@@ -250,7 +269,7 @@ namespace Tree
                 return true;
             }
 
-            var comparisonResult = GetComparisonResult(parent.Data, child.Data, comparer);
+            var comparisonResult = Compare(parent.Data, child.Data);
 
             return comparisonResult > 0;
         }
@@ -282,7 +301,7 @@ namespace Tree
             return child;
         }
 
-        private static int GetComparisonResult(T data1, T data2, IComparer<T> comparer)
+        private int Compare(T data1, T data2)
         {
             if (comparer != null)
             {
@@ -294,16 +313,21 @@ namespace Tree
                 return 0;
             }
 
-            if (data1 == null || data2 == null)
+            if (data1 == null)
             {
-                return (data1 == null) ? -1 : 1;
+                return -1;
+            }
+
+            if (data2 == null)
+            {
+                return 1;
             }
 
             IComparable<T> comparable = data1 as IComparable<T>;
 
             if (comparable == null)
             {
-                throw new InvalidOperationException("There is no way to compare elements!");
+                throw new InvalidOperationException("The type must be IComparable<T>, or pass the comparator to the constructor!");
             }
 
             return comparable.CompareTo(data2);

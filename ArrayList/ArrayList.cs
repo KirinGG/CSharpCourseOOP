@@ -65,16 +65,17 @@ namespace ArrayList
 
         public void Add(T item)
         {
-            if (Count == Capacity)
-            {
-                Capacity = (Capacity == 0) ? DefaultCapacity : Capacity * 2;
-            }
-
+            CheckCapacity();
             Insert(Count, item);
         }
 
         public void Clear()
         {
+            if (Count == 0)
+            {
+                return;
+            }
+
             Array.Clear(items, 0, Count);
             Count = 0;
             modificationsCount++;
@@ -82,12 +83,7 @@ namespace ArrayList
 
         public bool Contains(T item)
         {
-            if (IndexOf(item) == -1)
-            {
-                return false;
-            }
-
-            return true;
+            return IndexOf(item) >= 0;
         }
 
         public void CopyTo(T[] array, int arrayIndex)
@@ -102,27 +98,9 @@ namespace ArrayList
                 throw new ArgumentOutOfRangeException(nameof(arrayIndex), $"The index goes beyond the boundary [0, {array.Length}) of the list. Current index value: {arrayIndex}.");
             }
 
-            if(array.Rank > 1)
+            if (array.Rank > 1)
             {
                 throw new ArgumentException("The array is multidimensional!", nameof(array));
-            }
-
-            if(!(items is T[]))
-            {
-                throw new ArrayTypeMismatchException("The source array type cannot be automatically converted to the destination array type!");
-            }
-
-            if (items.Rank > 1)
-            {
-                throw new RankException("The source array is multidimensional!");
-            }
-
-            foreach(var item in items)
-            {
-                if(!(item is T))
-                {
-                    throw new InvalidCastException("At least one element in the source array cannot be cast to the destination array type!");
-                }
             }
 
             Array.Copy(items, 0, array, arrayIndex, Count);
@@ -130,11 +108,11 @@ namespace ArrayList
 
         public IEnumerator<T> GetEnumerator()
         {
-            var currentModificationsNumber = modificationsCount;
+            var currentModificationsCount = modificationsCount;
 
-            for (int i = 0; i < Count; i++)
+            for (var i = 0; i < Count; i++)
             {
-                if (currentModificationsNumber != modificationsCount)
+                if (currentModificationsCount != modificationsCount)
                 {
                     throw new InvalidOperationException("The data has been modified!");
                 }
@@ -150,19 +128,9 @@ namespace ArrayList
 
         public int IndexOf(T item)
         {
-            for (int i = 0; i < Count; i++)
+            for (var i = 0; i < Count; i++)
             {
-                if (items[i] == null && item == null)
-                {
-                    return i;
-                }
-
-                if (items[i] == null || item == null)
-                {
-                    continue;
-                }
-
-                if (items[i].Equals(item))
+                if (Equals(items[i], item))
                 {
                     return i;
                 }
@@ -178,10 +146,7 @@ namespace ArrayList
                 throw new ArgumentOutOfRangeException(nameof(index), $"The index goes beyond the boundary [0, {Count}] of the list. Current index value: {index}.");
             }
 
-            if (Count == Capacity)
-            {
-                Capacity = (Capacity == 0) ? DefaultCapacity : Capacity * 2;
-            }
+            CheckCapacity();
 
             Array.Copy(items, index, items, index + 1, Count - index);
 
@@ -214,9 +179,9 @@ namespace ArrayList
             modificationsCount++;
         }
 
-        public void TrimExpress()
+        public void TrimExcess()
         {
-            if (100 - Count / items.Length * 100 > 10)
+            if (Count < items.Length * 0.9)
             {
                 Capacity = Count;
             }
@@ -237,6 +202,14 @@ namespace ArrayList
             if (index < 0 || index >= Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), $"The index goes beyond the boundary [0, {Count}) of the list. Current index value: {index}.");
+            }
+        }
+
+        private void CheckCapacity()
+        {
+            if (Count == Capacity)
+            {
+                Capacity = (Capacity == 0) ? DefaultCapacity : Capacity * 2;
             }
         }
     }

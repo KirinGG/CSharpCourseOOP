@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace ArrayList
 {
@@ -7,7 +6,7 @@ namespace ArrayList
     {
         static void Main(string[] args)
         {
-            ArrayList<string> arrayList = new ArrayList<string>
+            var arrayList = new ArrayList<string>
             {
                 "Иванов",
                 "Петров",
@@ -37,12 +36,12 @@ namespace ArrayList
 
             Console.WriteLine("--- trimToSize ---");
             Console.WriteLine(arrayList.Capacity);
-            arrayList.TrimExpress();
+            arrayList.TrimExcess();
             Console.WriteLine(arrayList);
             Console.WriteLine(arrayList.Capacity);
 
             Console.WriteLine("--- CopyTo ---");
-            string[] str = new string[16];
+            var str = new string[16];
             arrayList.CopyTo(str, 2);
 
             Console.WriteLine("--- Clear ---");

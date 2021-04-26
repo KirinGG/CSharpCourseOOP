@@ -6,9 +6,9 @@ namespace SinglyLinkedList
     {
         static void Main(string[] args)
         {
-            SinglyLinkedList<string> list = new SinglyLinkedList<string>();
+            var list = new SinglyLinkedList<string>();
 
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 list.AddFirst(i.ToString());
             }

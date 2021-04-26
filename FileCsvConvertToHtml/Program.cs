@@ -18,7 +18,7 @@ namespace FileCsvConvertToHtml
 
             if (!File.Exists(inputFilePath))
             {
-                Console.WriteLine($"Входной файл: {inputFilePath} не найден!") ;
+                Console.WriteLine($"Входной файл: {inputFilePath} не найден!");
                 return;
             }
 
@@ -26,7 +26,7 @@ namespace FileCsvConvertToHtml
             using StreamWriter writer = new StreamWriter(outFilePath);
 
             Converter converter = new Converter(reader, writer);
-            converter.ConvertCsvToHtml();          
-         }
+            converter.ConvertCsvToHtml();
+        }
     }
 }

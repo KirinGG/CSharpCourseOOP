@@ -5,8 +5,8 @@ namespace FileCsvConvertToHtml
 {
     class Converter
     {
-        private StreamReader reader;
-        private StreamWriter writer;
+        private readonly StreamReader reader;
+        private readonly StreamWriter writer;
 
         public Converter(StreamReader reader, StreamWriter writer)
         {
@@ -14,11 +14,9 @@ namespace FileCsvConvertToHtml
             this.writer = writer;
         }
 
-        private Converter CreateHeader()
+        private void CreateHeader()
         {
             writer.Write(GetHeader());
-
-            return this;
         }
 
         public void ConvertCsvToHtml()
@@ -41,7 +39,7 @@ namespace FileCsvConvertToHtml
                 "<table>");
         }
 
-        private Converter CreateBody()
+        private void CreateBody()
         {
             string currentLine;
             int quotesCount = 0;
@@ -92,15 +90,11 @@ namespace FileCsvConvertToHtml
                     previousCharacter = currentLine[i];
                 }
             }
-
-            return this;
         }
 
-        private Converter CreateFooter()
+        private void CreateFooter()
         {
             writer.WriteLine(GetFooter());
-
-            return this;
         }
 
         private static string GetFooter()
@@ -160,7 +154,7 @@ namespace FileCsvConvertToHtml
 
                 if (currentLine[i] == '"')
                 {
-                    return "<td>";
+                    return "</td>";
                 }
 
                 return $"{ReplaceSpecialCharacters(currentLine[i])}</td>";

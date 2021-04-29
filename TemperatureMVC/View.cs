@@ -12,7 +12,7 @@ namespace Temperature
 {
     public partial class View : Form, IView
     {
-        Controller controller;
+        private Controller controller;
 
         public View()
         {
@@ -59,23 +59,28 @@ namespace Temperature
 
         private void buttonCalculate_Click(object sender, EventArgs e)
         {
+            textBoxResult.ForeColor = Color.Black;
+
             if (comboBoxFrom.SelectedItem == null)
             {
                 textBoxResult.Text = "The unit of measurement from which the temperature is translated cannot be null!";
+                textBoxResult.ForeColor = Color.Red;
                 return;
             }
 
             if (comboBoxTo.SelectedItem == null)
             {
                 textBoxResult.Text = "The unit of measurement in which the temperature is translated cannot be null!";
+                textBoxResult.ForeColor = Color.Red;
                 return;
             }
 
-            bool isNumerical = double.TryParse(textBoxValue.Text, out double temperature);
+            bool isNumerical = double.TryParse(textBoxValue.Text, out var temperature);
 
             if (!isNumerical)
             {
                 textBoxResult.Text = "The temperature must be a number!";
+                textBoxResult.ForeColor = Color.Red;
                 return;
             }
 
@@ -84,10 +89,12 @@ namespace Temperature
 
         private void comboBoxFrom_SelectedIndexChanged(object sender, EventArgs e)
         {
+            textBoxResult.ForeColor = Color.Black;
+
             if (comboBoxFrom.SelectedItem == null)
             {
-                //throw new ArgumentNullException(nameof(comboBoxFrom.SelectedItem), "The unit of measurement from which the temperature is translated cannot be null!");
                 textBoxResult.Text = "The unit of measurement from which the temperature is translated cannot be null!";
+                textBoxResult.ForeColor = Color.Red;
                 return;
             }
 
@@ -96,10 +103,12 @@ namespace Temperature
 
         private void comboBoxTo_SelectedIndexChanged(object sender, EventArgs e)
         {
+            textBoxResult.ForeColor = Color.Black;
+
             if (comboBoxTo.SelectedItem == null)
             {
-                //throw new ArgumentNullException(nameof(comboBoxFrom.SelectedItem), "The unit of measurement in which the temperature is translated cannot be null!");
                 textBoxResult.Text = "The unit of measurement in which the temperature is translated cannot be null!";
+                textBoxResult.ForeColor = Color.Red;
                 return;
             }
 
@@ -110,11 +119,12 @@ namespace Temperature
         {
             double temperature;
             bool isNumerical = double.TryParse(textBoxValue.Text, out temperature);
+            textBoxResult.ForeColor = Color.Black;
 
             if (!isNumerical)
             {
-                //throw new ArgumentException("The temperature must be a number!", nameof(textBoxValue));
                 textBoxResult.Text = "The temperature must be a number!";
+                textBoxResult.ForeColor = Color.Red;
                 return;
             }
 

@@ -72,6 +72,7 @@ namespace Temperature
             this.labelValue.Size = new System.Drawing.Size(44, 29);
             this.labelValue.TabIndex = 0;
             this.labelValue.Text = "Value";
+            this.labelValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // textBoxValue
             // 
@@ -97,27 +98,31 @@ namespace Temperature
             // labelFrom
             // 
             this.labelFrom.AutoSize = true;
-            this.labelFrom.Dock = System.Windows.Forms.DockStyle.Left;
+            this.labelFrom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labelFrom.Location = new System.Drawing.Point(3, 0);
             this.labelFrom.Name = "labelFrom";
-            this.labelFrom.Size = new System.Drawing.Size(30, 27);
+            this.labelFrom.Size = new System.Drawing.Size(44, 27);
             this.labelFrom.TabIndex = 0;
             this.labelFrom.Text = "From";
+            this.labelFrom.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // labelTo
             // 
             this.labelTo.AutoSize = true;
-            this.labelTo.Dock = System.Windows.Forms.DockStyle.Left;
+            this.labelTo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labelTo.Location = new System.Drawing.Point(159, 0);
             this.labelTo.Name = "labelTo";
-            this.labelTo.Size = new System.Drawing.Size(20, 27);
+            this.labelTo.Size = new System.Drawing.Size(44, 27);
             this.labelTo.TabIndex = 1;
             this.labelTo.Text = "To";
+            this.labelTo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // comboBoxFrom
             // 
             this.comboBoxFrom.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBoxFrom.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFrom.FormattingEnabled = true;
+            this.comboBoxFrom.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.comboBoxFrom.Location = new System.Drawing.Point(53, 3);
             this.comboBoxFrom.Name = "comboBoxFrom";
             this.comboBoxFrom.Size = new System.Drawing.Size(100, 21);
@@ -127,6 +132,7 @@ namespace Temperature
             // comboBoxTo
             // 
             this.comboBoxTo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBoxTo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxTo.FormattingEnabled = true;
             this.comboBoxTo.Location = new System.Drawing.Point(209, 3);
             this.comboBoxTo.Name = "comboBoxTo";
@@ -175,6 +181,7 @@ namespace Temperature
             // 
             // textBoxResult
             // 
+            this.textBoxResult.BackColor = System.Drawing.Color.White;
             this.textBoxResult.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxResult.Location = new System.Drawing.Point(3, 71);
             this.textBoxResult.Multiline = true;
@@ -189,7 +196,9 @@ namespace Temperature
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(319, 145);
             this.Controls.Add(this.tableLayoutPanel3);
+            this.MinimumSize = new System.Drawing.Size(335, 184);
             this.Name = "View";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Temperature";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();

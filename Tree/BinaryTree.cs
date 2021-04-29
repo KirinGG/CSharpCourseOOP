@@ -72,7 +72,7 @@ namespace Tree
                 }
 
                 parent = currentTreeNode;
-                currentTreeNode = (comparisonResult > 0) ? currentTreeNode.Right : currentTreeNode.Left;
+                currentTreeNode = comparisonResult > 0 ? currentTreeNode.Right : currentTreeNode.Left;
             }
 
             return null;
@@ -85,7 +85,7 @@ namespace Tree
                 return false;
             }
 
-            return (FindWithParent(data, out var parent) == null) ? false : true;
+            return FindWithParent(data, out var parent) != null;
         }
 
         public bool Remove(T data)
@@ -180,7 +180,7 @@ namespace Tree
                 throw new InvalidOperationException("No action set for the crawling collection!");
             }
 
-            Queue<TreeNode<T>> queue = new Queue<TreeNode<T>>();
+            var queue = new Queue<TreeNode<T>>();
             queue.Enqueue(root);
 
             while (queue.Count > 0)
@@ -212,7 +212,7 @@ namespace Tree
                 throw new InvalidOperationException("No action set for the crawling collection!");
             }
 
-            Stack<TreeNode<T>> stack = new Stack<TreeNode<T>>();
+            var stack = new Stack<TreeNode<T>>();
             stack.Push(root);
 
             while (stack.Count > 0)
@@ -323,7 +323,7 @@ namespace Tree
                 return 1;
             }
 
-            IComparable<T> comparable = data1 as IComparable<T>;
+            var comparable = data1 as IComparable<T>;
 
             if (comparable == null)
             {

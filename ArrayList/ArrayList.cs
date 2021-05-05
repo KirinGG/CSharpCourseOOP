@@ -65,7 +65,6 @@ namespace ArrayList
 
         public void Add(T item)
         {
-            CheckCapacity();
             Insert(Count, item);
         }
 
@@ -98,9 +97,9 @@ namespace ArrayList
                 throw new ArgumentOutOfRangeException(nameof(arrayIndex), $"The index goes beyond the boundary [0, {array.Length}) of the list. Current index value: {arrayIndex}.");
             }
 
-            if (array.Rank > 1)
+            if(Count > Capacity - (arrayIndex + Count))
             {
-                throw new ArgumentException("The array is multidimensional!", nameof(array));
+                throw new ArgumentException("The number of elements in the source collection ICollection<T> is greater than the available space from the position specified by the value of the arrayIndex parameter to the end of the destination array array.");
             }
 
             Array.Copy(items, 0, array, arrayIndex, Count);
@@ -146,7 +145,7 @@ namespace ArrayList
                 throw new ArgumentOutOfRangeException(nameof(index), $"The index goes beyond the boundary [0, {Count}] of the list. Current index value: {index}.");
             }
 
-            CheckCapacity();
+            IncreaseCapacity();
 
             Array.Copy(items, index, items, index + 1, Count - index);
 
@@ -171,11 +170,18 @@ namespace ArrayList
 
         public void RemoveAt(int index)
         {
-            CheckIndex(index);
+            if (index < 0 || index > Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index), $"The index goes beyond the boundary [0, {Count}] of the list. Current index value: {index}.");
+            }
 
-            Array.Copy(items, index + 1, items, index, Count - index);
+            if(Count != Capacity)
+            {
+                Array.Copy(items, index + 1, items, index, Count - index);
+            }
+            
             Count--;
-            Array.Clear(items, Count, 1);
+            items[Count] = default;
             modificationsCount++;
         }
 
@@ -205,7 +211,7 @@ namespace ArrayList
             }
         }
 
-        private void CheckCapacity()
+        private void IncreaseCapacity()
         {
             if (Count == Capacity)
             {

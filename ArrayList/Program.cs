@@ -33,6 +33,14 @@ namespace ArrayList
             Console.WriteLine("--- RemoveAT ---");
             arrayList.RemoveAt(0);
             Console.WriteLine(arrayList);
+            Console.WriteLine(arrayList.Capacity);
+            arrayList.Add("Name 1");
+            arrayList.Add("Name 2");
+            arrayList.Add("Name 3");
+            arrayList.Add("Name 4");
+            arrayList.Add("Name 5");
+            arrayList.RemoveAt(arrayList.Count);
+            Console.WriteLine(arrayList);
 
             Console.WriteLine("--- trimToSize ---");
             Console.WriteLine(arrayList.Capacity);

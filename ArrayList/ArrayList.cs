@@ -97,7 +97,7 @@ namespace ArrayList
                 throw new ArgumentOutOfRangeException(nameof(arrayIndex), $"The index goes beyond the boundary [0, {array.Length}) of the list. Current index value: {arrayIndex}.");
             }
 
-            if (Count > Capacity - (arrayIndex + Count))
+            if (Count > array.Length - arrayIndex)
             {
                 throw new ArgumentException("The number of elements in the source collection ICollection<T> is greater than the available space from the position specified by the value of the arrayIndex parameter to the end of the destination array array.");
             }

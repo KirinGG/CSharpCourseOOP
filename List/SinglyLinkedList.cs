@@ -69,7 +69,7 @@ namespace SinglyLinkedList
         {
             if (index < 0 || index > Count)
             {
-                throw new ArgumentOutOfRangeException(nameof(index), $"The index goes beyond the boundary (0, {Count}) of the list. Current index value: {index}.");
+                throw new ArgumentOutOfRangeException(nameof(index), $"The index goes beyond the boundary [0, {Count}] of the list. Current index value: {index}.");
             }
 
             if (index == 0)

@@ -170,14 +170,18 @@ namespace ArrayList
 
         public void RemoveAt(int index)
         {
-            if (index < 0 || index > Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index), $"The index goes beyond the boundary [0, {Count}] of the list. Current index value: {index}.");
-            }
+            CheckIndex(index);
 
             if (Count != Capacity)
             {
                 Array.Copy(items, index + 1, items, index, Count - index);
+            }
+            else
+            {
+                if (index + 1 < Count)
+                {
+                    Array.Copy(items, index + 1, items, index, Count - (index + 1));
+                }
             }
 
             Count--;

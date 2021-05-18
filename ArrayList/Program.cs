@@ -39,7 +39,12 @@ namespace ArrayList
             arrayList.Add("Name 3");
             arrayList.Add("Name 4");
             arrayList.Add("Name 5");
-            arrayList.RemoveAt(arrayList.Count);
+            Console.WriteLine(arrayList);
+            arrayList.RemoveAt(arrayList.Count - 1);
+            Console.WriteLine(arrayList);
+            arrayList.Add("Name 6");
+            Console.WriteLine(arrayList);
+            arrayList.RemoveAt(5);
             Console.WriteLine(arrayList);
 
             Console.WriteLine("--- trimToSize ---");

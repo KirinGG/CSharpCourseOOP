@@ -6,9 +6,9 @@ namespace SinglyLinkedList
     {
         static void Main(string[] args)
         {
-            SinglyLinkedList<string> list = new SinglyLinkedList<string>();
+            var list = new SinglyLinkedList<string>();
 
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 list.AddFirst(i.ToString());
             }
@@ -34,7 +34,10 @@ namespace SinglyLinkedList
             list.Remove(null);
             Console.WriteLine(list);
 
-            list.Insert(list.Count - 1, "33");
+            list.Insert(4, "33");
+            Console.WriteLine(list);
+
+            list.Insert(list.Count, "75");
             Console.WriteLine(list);
 
             Console.WriteLine(list.Get(list.Count - 1));

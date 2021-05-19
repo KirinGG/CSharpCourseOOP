@@ -18,12 +18,11 @@
             Data = data;
             Left = left;
             Right = right;
-
         }
 
         public override string ToString()
         {
-            return Data.ToString();
+            return (Data == null) ? "null" : Data.ToString();
         }
     }
 }

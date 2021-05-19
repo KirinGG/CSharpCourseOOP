@@ -6,9 +6,13 @@ namespace Tree
     class BinaryTree<T>
     {
         private TreeNode<T> root;
-        private IComparer<T> comparer;
+        private readonly IComparer<T> comparer;
 
-        public BinaryTree(IComparer<T> comparer = null)
+        public BinaryTree() : this(null)
+        {
+        }
+
+        public BinaryTree(IComparer<T> comparer)
         {
             this.comparer = comparer;
         }
@@ -33,7 +37,7 @@ namespace Tree
             {
                 parent = currentTreeNode;
                 isLeftBranch = IsLeftSide(parent, newTreeNode);
-                currentTreeNode = (isLeftBranch) ? currentTreeNode.Left : currentTreeNode.Right;
+                currentTreeNode = isLeftBranch ? currentTreeNode.Left : currentTreeNode.Right;
             }
 
             Count++;
@@ -58,16 +62,9 @@ namespace Tree
                 return null;
             }
 
-            IComparable<T> comparable = data as IComparable<T>;
-
-            if (comparer == null & comparable == null)
-            {
-                throw new InvalidOperationException("There is no way to compare elements!");
-            }
-
             while (currentTreeNode != null)
             {
-                var comparisonResult = (comparer != null) ? comparer.Compare(data, currentTreeNode.Data) : comparable.CompareTo(currentTreeNode.Data);
+                var comparisonResult = Compare(data, currentTreeNode.Data);
 
                 if (comparisonResult == 0)
                 {
@@ -75,20 +72,20 @@ namespace Tree
                 }
 
                 parent = currentTreeNode;
-                currentTreeNode = (comparisonResult > 0) ? currentTreeNode.Right : currentTreeNode.Left;
+                currentTreeNode = comparisonResult > 0 ? currentTreeNode.Right : currentTreeNode.Left;
             }
 
             return null;
         }
 
-        public TreeNode<T> Find(T data)
+        public bool Contains(T data)
         {
             if (root == null)
             {
-                return null;
+                return false;
             }
 
-            return FindWithParent(data, out TreeNode<T> parent);
+            return FindWithParent(data, out var parent) != null;
         }
 
         public bool Remove(T data)
@@ -98,7 +95,7 @@ namespace Tree
                 return false;
             }
 
-            var currentTreeNode = FindWithParent(data, out TreeNode<T> parent);
+            var currentTreeNode = FindWithParent(data, out var parent);
 
             if (currentTreeNode == null)
             {
@@ -141,7 +138,7 @@ namespace Tree
             {
                 if (parent == null)
                 {
-                    parent = currentTreeNode.Left;
+                    root = currentTreeNode.Left;
                 }
                 else if (IsLeftSide(parent, currentTreeNode))
                 {
@@ -171,24 +168,25 @@ namespace Tree
             return true;
         }
 
-        public void WidthTraversal(Action<TreeNode<T>> action = null)
+        public void WidthTraversal(Action<T> action)
         {
             if (root == null)
             {
                 return;
             }
 
-            Queue<TreeNode<T>> queue = new Queue<TreeNode<T>>();
+            if (action == null)
+            {
+                throw new InvalidOperationException("No action set for the crawling collection!");
+            }
+
+            var queue = new Queue<TreeNode<T>>();
             queue.Enqueue(root);
 
             while (queue.Count > 0)
             {
                 var treeNode = queue.Dequeue();
-
-                if (action != null)
-                {
-                    action(treeNode);
-                }
+                action(treeNode.Data);
 
                 if (treeNode.Left != null)
                 {
@@ -202,24 +200,25 @@ namespace Tree
             }
         }
 
-        public void TraversalInDeep(Action<TreeNode<T>> action = null)
+        public void TraversalInDeep(Action<T> action)
         {
             if (root == null)
             {
                 return;
             }
 
-            Stack<TreeNode<T>> stack = new Stack<TreeNode<T>>();
+            if (action == null)
+            {
+                throw new InvalidOperationException("No action set for the crawling collection!");
+            }
+
+            var stack = new Stack<TreeNode<T>>();
             stack.Push(root);
 
             while (stack.Count > 0)
             {
                 var treeNode = stack.Pop();
-
-                if (action != null)
-                {
-                    action(treeNode);
-                }
+                action(treeNode.Data);
 
                 if (treeNode.Right != null)
                 {
@@ -233,22 +232,24 @@ namespace Tree
             }
         }
 
-        public void TraversalInDeepRecursive(Action<TreeNode<T>> action = null)
+        public void TraversalInDeepRecursive(Action<T> action)
         {
             if (root == null)
             {
                 return;
             }
 
+            if (action == null)
+            {
+                throw new InvalidOperationException("No action set for the crawling collection!");
+            }
+
             RecursiveTraversal(root, action);
         }
 
-        private void RecursiveTraversal(TreeNode<T> treeNode, Action<TreeNode<T>> action = null)
+        private static void RecursiveTraversal(TreeNode<T> treeNode, Action<T> action)
         {
-            if (action != null)
-            {
-                action(treeNode);
-            }
+            action(treeNode.Data);
 
             if (treeNode.Left != null)
             {
@@ -268,14 +269,7 @@ namespace Tree
                 return true;
             }
 
-            IComparable<T> comparable = parent.Data as IComparable<T>;
-
-            if (comparer == null & comparable == null)
-            {
-                throw new InvalidOperationException("There is no way to compare elements!");
-            }
-
-            var comparisonResult = (comparer != null) ? comparer.Compare(parent.Data, child.Data) : comparable.CompareTo(child.Data);
+            var comparisonResult = Compare(parent.Data, child.Data);
 
             return comparisonResult > 0;
         }
@@ -305,6 +299,38 @@ namespace Tree
             child.Right = treeNode.Right;
 
             return child;
+        }
+
+        private int Compare(T data1, T data2)
+        {
+            if (comparer != null)
+            {
+                return comparer.Compare(data1, data2);
+            }
+
+            if (data1 == null && data2 == null)
+            {
+                return 0;
+            }
+
+            if (data1 == null)
+            {
+                return -1;
+            }
+
+            if (data2 == null)
+            {
+                return 1;
+            }
+
+            var comparable = data1 as IComparable<T>;
+
+            if (comparable == null)
+            {
+                throw new InvalidOperationException("The type must be IComparable<T>, or pass the comparator to the constructor!");
+            }
+
+            return comparable.CompareTo(data2);
         }
     }
 }

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.IO;
-using FileCsvConvertToHtml.Data;
 
 namespace FileCsvConvertToHtml
 {
-    class FileCsvConvertToHtml
+    class Program
     {
         static void Main(string[] args)
         {
@@ -19,23 +18,15 @@ namespace FileCsvConvertToHtml
 
             if (!File.Exists(inputFilePath))
             {
-                Console.WriteLine($"Входной файл: {inputFilePath} не найден!") ;
+                Console.WriteLine($"Входной файл: {inputFilePath} не найден!");
                 return;
             }
 
-            if (!File.Exists(outFilePath))
-            {
-                Console.WriteLine($"Выходной файл: {outFilePath} не найден!");
-                return;
-            }
+            using StreamReader reader = new StreamReader(inputFilePath);
+            using StreamWriter writer = new StreamWriter(outFilePath);
 
-            using DataFromFile dataFromFile = new DataFromFile(inputFilePath);
-            using DataToFile dataToFile = new DataToFile(outFilePath);
-
-            HtmlDocument htmlDocument = new HtmlDocument(dataFromFile, dataToFile);
-            htmlDocument.CreateHeader();
-            htmlDocument.CreateBody();
-            htmlDocument.CreateFooter();
-         }
+            Converter converter = new Converter(reader, writer);
+            converter.ConvertCsvToHtml();
+        }
     }
 }

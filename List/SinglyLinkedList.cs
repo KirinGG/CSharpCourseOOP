@@ -67,7 +67,10 @@ namespace SinglyLinkedList
 
         public void Insert(int index, T data)
         {
-            CheckIndex(index);
+            if (index < 0 || index > Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index), $"The index goes beyond the boundary [0, {Count}] of the list. Current index value: {index}.");
+            }
 
             if (index == 0)
             {
@@ -78,14 +81,7 @@ namespace SinglyLinkedList
             var previousItem = GetItemByIndex(index - 1);
             var currentItem = previousItem.Next;
 
-            if (index == Count - 1)
-            {
-                currentItem.Next = new ListItem<T>(data, currentItem);
-            }
-            else
-            {
-                previousItem.Next = new ListItem<T>(data, currentItem);
-            }
+            previousItem.Next = new ListItem<T>(data, currentItem);
 
             Count++;
         }
@@ -98,13 +94,11 @@ namespace SinglyLinkedList
             }
 
             ListItem<T> previousItem = null;
-            ListItem<T> currentItem = head;
+            var currentItem = head;
 
             do
             {
-                var isEquals = (currentItem.Data == null || data == null) ? (currentItem.Data == null && data == null) : (currentItem.Data.Equals(data));
-
-                if (isEquals)
+                if (Equals(currentItem.Data, data))
                 {
                     if (currentItem == head)
                     {
@@ -134,11 +128,11 @@ namespace SinglyLinkedList
                 throw new InvalidOperationException("The list is empty.");
             }
 
-            var deletedData = head.Data;
+            var removedData = head.Data;
             head = head.Next;
             Count--;
 
-            return deletedData;
+            return removedData;
         }
 
         public void Reverse()
@@ -152,7 +146,7 @@ namespace SinglyLinkedList
             ListItem<T> link2 = null;
             ListItem<T> link3 = null;
 
-            for (ListItem<T> p = head; p != null; p = p.Next)
+            for (var p = head; p != null; p = p.Next)
             {
                 if (link2 != null)
                 {
@@ -176,7 +170,7 @@ namespace SinglyLinkedList
                 return new SinglyLinkedList<T>();
             }
 
-            SinglyLinkedList<T> singlyLinkedList = new SinglyLinkedList<T>();
+            var singlyLinkedList = new SinglyLinkedList<T>();
             singlyLinkedList.head = new ListItem<T>(head.Data);
             singlyLinkedList.Count = Count;
 
@@ -195,10 +189,10 @@ namespace SinglyLinkedList
                 return "[]";
             }
 
-            StringBuilder stringBuilder = new StringBuilder("[").Append(head);
-            ListItem<T> currentItem = head;
+            var stringBuilder = new StringBuilder("[").Append(head);
+            var currentItem = head;
 
-            for (int i = 1; i < Count; i++)
+            for (var i = 1; i < Count; i++)
             {
                 currentItem = currentItem.Next;
                 stringBuilder.Append(", ").Append(currentItem);
@@ -217,9 +211,9 @@ namespace SinglyLinkedList
 
         private ListItem<T> GetItemByIndex(int index)
         {
-            ListItem<T> currentItem = head;
+            var currentItem = head;
 
-            for (int i = 0; i < index; i++)
+            for (var i = 0; i < index; i++)
             {
                 currentItem = currentItem.Next;
             }

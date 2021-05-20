@@ -2,6 +2,9 @@
 {
     interface IScale
     {
+        void ConvertToCelsius();
+
+        public void Temperature;
 
       /*  void RefreshView(double temperature);
 
